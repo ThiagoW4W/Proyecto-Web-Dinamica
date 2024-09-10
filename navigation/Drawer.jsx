@@ -17,7 +17,7 @@ export default function Drawer() {
      //diseño Drawer
        screenOptions={{
            drawerStyle:{
-             backgroundColor: "#fff",
+             backgroundColor: "#000",
              width:250,
              height:'100%'
            },
