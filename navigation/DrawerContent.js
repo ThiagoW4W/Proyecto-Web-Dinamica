@@ -24,48 +24,64 @@ import React from "react";
           source={require("../img/gear.png")}
           
         />
+        
         </View>
          
-        <TouchableOpacity style={Styles.Size} activeOpacity={0.7}>
-            <Text style={Styles.button} onPress={()=>navigation.navigate('inicia')}>Inicio</Text>
+        <TouchableOpacity style={Styles.Size } onPress={()=>navigation.navigate('inicia')} activeOpacity={0.7}>
+            <Text style={Styles.button} >Inicio</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={Styles.Size} >
-            <Text style={Styles.button} onPress={()=>navigation.navigate('checklists')}>Checklist</Text>
+        <TouchableOpacity style={Styles.Size} onPress={()=>navigation.navigate('checklists')}>
+            <Text style={Styles.button} >Checklist</Text>
         </TouchableOpacity>
 
+        <TouchableOpacity style={Styles.Size} onPress={()=>navigation.navigate('boleterias')}>
+            <Text style={Styles.button} >Boleteria</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={Styles.Size} onPress={()=>navigation.navigate('boleterias')}>
+            <Text style={Styles.dropdown} >Ventas</Text>  
+        </TouchableOpacity>
+
+        <TouchableOpacity style={Styles.Size} onPress={()=>navigation.navigate('boleterias')}>
+            <Text style={Styles.dropdown} >Reservas</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={Styles.Size} onPress={()=>navigation.navigate('boleterias')}>
+            <Text style={Styles.button} >Zonas</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={Styles.Size} onPress={()=>navigation.navigate('boleterias')}>
+            <Text style={Styles.button} >Ropero</Text>   
+        </TouchableOpacity>
+
+        <TouchableOpacity style={Styles.Size} onPress={()=>navigation.navigate('boleterias')}> 
+            <Text style={Styles.button} >Mercaderia</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={Styles.Size} onPress={()=>navigation.navigate('boleterias')}>
+            <Text style={Styles.dropdown} >Lista productos</Text>   
+        </TouchableOpacity>
+
+        <TouchableOpacity style={Styles.Size} onPress={()=>navigation.navigate('boleterias')}>
+            <Text style={Styles.dropdown} >Stock</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={Styles.Size}>
-            <Text style={Styles.button} onPress={()=>navigation.navigate('boleterias')}>Boleteria</Text>
+       
+        <TouchableOpacity style={Styles.Size} onPress={()=>navigation.navigate('inicia')}>
+            <Text style={Styles.buttonstop} >Ayuda</Text>   
         </TouchableOpacity>
-
-        <TouchableOpacity style={Styles.Size}>
-            <Text style={Styles.dropdown} onPress={()=>navigation.navigate('boleterias')}>Ventas</Text>  
+        <TouchableOpacity style={Styles.Size} onPress={()=>navigation.navigate('inicia')}>
+            <Text style={Styles.buttons1} >Contactanos</Text>   
         </TouchableOpacity>
-
-        <TouchableOpacity style={Styles.Size}>
-            <Text style={Styles.dropdown} onPress={()=>navigation.navigate('boleterias')}>Reservas</Text>
+        <TouchableOpacity style={Styles.Size} onPress={()=>navigation.navigate('inicia')}>
+            <Text style={Styles.buttons1} >Perfil</Text>   
         </TouchableOpacity>
-
-        <TouchableOpacity style={Styles.Size}>
-            <Text style={Styles.button} onPress={()=>navigation.navigate('boleterias')}>Zonas</Text>
+        <TouchableOpacity style={Styles.Size} onPress={()=>navigation.navigate('Login')}>
+            <Text style={Styles.buttons} >Cerrar sesion</Text>   
         </TouchableOpacity>
-
-        <TouchableOpacity style={Styles.Size}>
-            <Text style={Styles.button} onPress={()=>navigation.navigate('boleterias')}>Ropero</Text>   
         </TouchableOpacity>
-
-        <TouchableOpacity style={Styles.Size}>
-            <Text style={Styles.button} onPress={()=>navigation.navigate('boleterias')}>Mercaderia</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={Styles.Size}>
-            <Text style={Styles.dropdown} onPress={()=>navigation.navigate('boleterias')}>Lista productos</Text>   
-        </TouchableOpacity>
-
-        <TouchableOpacity style={Styles.Size}>
-            <Text style={Styles.dropdown} onPress={()=>navigation.navigate('boleterias')}>Stock</Text>
-        </TouchableOpacity>
-
+        
        
         
       </DrawerContentScrollView>
@@ -84,19 +100,43 @@ import React from "react";
         flexDirection:'row',
         justifyContent:'space-between'
     },
-    button:{
-        color:'#fff',
-        padding:15,
-     
-        marginTop:'5%',
+    buttons1:{
+        color:'white',
+        padding:10,
+        marginTop:'0%',
         width:'100%',
         display:'flex',
         textAlign:'center'
     },
+    buttons:{
+        color:'red',
+        padding:10,
+        marginTop:'2%',
+        width:'100%',
+        display:'flex',
+        textAlign:'center'
+    },
+    buttonstop:{
+        color:'white',
+        padding:10,
+        marginTop:'30%',
+        width:'100%',
+        display:'flex',
+        textAlign:'center'
+    },
+    button:{
+        color:'#fff',
+        padding:15,
+     
+        marginTop:'2%',
+        width:'100%',
+        display:'flex',
+        textAlign:'center',
+        marginBottom:'1%'
+    },
     inside:{
         color:'#fff',
         width:'100%',
-      
         padding:15,
         
     },

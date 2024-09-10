@@ -24,7 +24,7 @@ export default function TabScreen() {
          />
           <Tab.Screen name="Secundario" component={Checklist}
             options={{
-              title:"checklist",
+              title:"checklists",
             
             }}
           />

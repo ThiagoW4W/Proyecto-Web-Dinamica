@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, buttonText, Alert, ImageBackground, TouchableOpacity } from 'react-native';
-import backgroundImage from './imagen/fondo.jpg';
+import backgroundImage from '../fondo.jpg';
+import Inicio from './Inicio';
 
-export default function Login() {
+export default function Login({navigation}) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -48,12 +49,13 @@ export default function Login() {
         secureTextEntry
       />
        <Text style={styles.olvide}>Olvidé mi contraseña</Text>
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>ingresar</Text>
+      <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('DrawerNav')}>
+        <Text  style={styles.buttonText} >ingresar</Text>
       </TouchableOpacity>
       {errorMessage ? <Text style={styles.errorMessage}>{errorMessage}</Text> : null}
     </View>
-    <Text style={styles.pregunta}>¿No tenes cuenta? Crea una aca!</Text>
+  
+    <Text style={styles.pregunta} onPress={()=>navigation.navigate('Sign-Up')}>¿No tenes cuenta? Crea una aca!</Text>
     </ImageBackground>
   );
 }

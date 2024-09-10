@@ -1,7 +1,6 @@
 import { Link } from '@react-navigation/native';
 import { StyleSheet,View,Button,ImageBackground,Text,Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Checklist from '../Screens/Checklist'
 import { NavigationContainer } from '@react-navigation/native';
 const image= require("../fondo.jpg")
 import TabScreen from '../navigation/Tab';
@@ -13,12 +12,12 @@ export default function Inicio() {
       
       <ImageBackground source={image} style={styles.container}>
         
-        <Link style={styles.check} to={{screen:'Checklist'}}>
+        <Link style={styles.check} to={{screen:'checklists'}}>
         
         <Text style={styles.texto}>Checklist</Text>
        
         </Link>
-        <Link style={styles.merc} to={{screen:'Checklist'}}>
+        <Link style={styles.merc} to={{screen:'checklists'}}>
         <View style={styles.box}>
         <Image
           style={styles.icons}
@@ -28,7 +27,7 @@ export default function Inicio() {
         <Text style={styles.texto}>Mercaderia</Text>
         </View>
         </Link>
-        <Link style={styles.second} to={{screen:'Checklist'}}>
+        <Link style={styles.second} to={{screen:'checklists'}}>
         <View style={styles.box}>
         <Image
           style={styles.icons}
@@ -39,7 +38,7 @@ export default function Inicio() {
         </View>
         </Link>
         
-        <Link style={styles.second} to={{screen:'Checklist'}}>
+        <Link style={styles.second} to={{screen:'checklists'}}>
         <View style={styles.box}>
         <Image
           style={styles.icons}
