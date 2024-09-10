@@ -5,6 +5,28 @@ export default function Checklist({navigation}) {
   
     return (
       <View style={styles.container}>
+        <View style={styles.titulo}>Checklist!</View>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
          <Button onPress={() => navigation.goBack()}
         title="inicio"></Button>
       
