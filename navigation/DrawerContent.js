@@ -55,7 +55,7 @@ import React from "react";
         </TouchableOpacity>
 
         <TouchableOpacity style={Styles.Size}>
-            <Text style={Styles.button} onPress={()=>navigation.navigate('boleterias')}>Mercaderia</Text>
+            <Text style={Styles.button} onPress={()=>navigation.navigate('mercaderias')}>Mercaderia</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={Styles.Size}>

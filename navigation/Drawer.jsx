@@ -4,9 +4,13 @@ import Checklist from '../Screens/Checklist'
 import Boleteria from '../Screens/Boleteria'
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Button } from 'react-native';
-import BolTabScreen from '../navigation/BoleteriaTab';
+
+
 import TabScreen from './Tab';
 import { MenuItems } from './DrawerContent';
+import Stock from '../Screens/Stock';
+import NuevoProducto from '../Screens/NuevoProducto'
+import Mercaderia from '../Screens/Mercaderia';
 const drawer = createDrawerNavigator();
 export default function Drawer() {
   return (
@@ -69,7 +73,37 @@ export default function Drawer() {
            title:"",
          }}
          //Componente: Asignacion con la pantalla
-         component={BolTabScreen} />
+         component={Boleteria} />
+
+
+         <drawer.Screen name="mercaderias" 
+         //Creacion Opcion Checklist
+         options={{
+           drawerLabel:"Mercaderia",
+           title:"",
+         }}
+         //Componente: Asignacion con la pantalla
+         component={Mercaderia} />
+
+
+         <drawer.Screen name="stocks" 
+         //Creacion Opcion Checklist
+         options={{
+           drawerLabel:"stock",
+           title:"",
+         }}
+         //Componente: Asignacion con la pantalla
+         component={Stock} />
+
+
+         <drawer.Screen name="new" 
+         //Creacion Opcion Checklist
+         options={{
+           drawerLabel:"Nuevo",
+           title:"",
+         }}
+         //Componente: Asignacion con la pantalla
+         component={NuevoProducto} />
           
         
           

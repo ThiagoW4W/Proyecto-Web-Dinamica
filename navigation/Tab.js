@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Inicio from '../Screens/Inicio'
-import Checklist from '../Screens/Checklist'
+import Inicio from '../Screens/Inicio';
+import Mercaderia from '../Screens/Mercaderia';
+import Boleteria from '../Screens/Boleteria';
 const Tab = createBottomTabNavigator();
 export default function TabScreen() {
 
@@ -22,9 +23,15 @@ export default function TabScreen() {
           
           }}
          />
-          <Tab.Screen name="Secundario" component={Checklist}
+          <Tab.Screen name="Secundario" component={Mercaderia}
             options={{
-              title:"checklist",
+              title:"Mercaderia",
+            
+            }}
+          />
+          <Tab.Screen name="Terciario" component={Boleteria}
+            options={{
+              title:"Boleteria",
             
             }}
           />
