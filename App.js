@@ -1,13 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, extInput, Button, Alert, ImageBackground ,TouchableOpacity } from 'react-native';
 import Login from './login';
+import Zonas from './zonas';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Login/>
      
       <StatusBar style="auto" />
+      <Zonas/>
     </View>
   );
 }
