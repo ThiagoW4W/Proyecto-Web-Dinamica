@@ -42,6 +42,10 @@ export default function AñadirProd({navigation}) {
                     <TextInput style={styles.input} placeholder='Here'></TextInput>
                     <Text>Precio del producto</Text>
                     <TextInput style={styles.input} placeholder='Here'></TextInput>
+                    <View style={styles.caja}>
+                        <Text>Stock</Text>
+                        <TextInput style={styles.input} placeholder='Here'></TextInput>
+                    </View>
                 <View style={styles.filtro}>
                     <Text>Con alcohol</Text>
                     <Checkbox name='uno'
@@ -60,6 +64,7 @@ export default function AñadirProd({navigation}) {
                     }}
                         />
                 </View>
+                   
                     <View style={styles.positionWidth}>
                     <TouchableOpacity style={styles.button}>
                     <Text style={styles.boton}>Guardar</Text>
@@ -105,7 +110,7 @@ titulo:{
     },
 
 box:{
-    width:'80%',
+    width:'70%',
     height:'80%',
     backgroundColor:'white',
     opacity: 0.7,
@@ -142,7 +147,7 @@ navSup:{
         width:'100%',
         height:'30%',
        
-        marginTop:'10%',
+        marginTop:'2%',
         justifyContent:'center',
         alignItems:'center'
 
@@ -173,7 +178,7 @@ navSup:{
     inp:{
         width:'100%',
         height:'57%',
-        top:'5%',
+        top:'2%',
         
       
     },
@@ -182,22 +187,24 @@ navSup:{
         borderColor:'black',
         borderBottomWidth:1,
         width:'100%',
-        height:'10%',
+        height:'14%',
         top:'2%',
         color:'black',
-        marginBottom:'10%'
+        marginBottom:'10%',
+        marginTop:5,
         
     },
     filtro:{
         display:'flex',
         flexDirection:'row',
         alignItems:'center',
+        top:-50,
     
     },
     positionWidth:{
         width:'100%',
         height:'15%',
-        top:15,
+        top:-50,
         alignItems:'center',
         display:'flex'
     },
@@ -217,8 +224,12 @@ navSup:{
         color: '#fff', 
         fontSize: 16,
        
+    },
+    caja:{
+        display:'flex',
+        
+        
     }
-    
    
 
 });
