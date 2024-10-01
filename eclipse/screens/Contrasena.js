@@ -21,8 +21,8 @@ function  Contrasena ({ navigation }) {
             secureTextEntry={true}
           />
     </View>
-    <TouchableOpacity style={styles.containerButton}>
-          <Text style={styles.buttonText}>Registrar</Text>
+    <TouchableOpacity style={styles.containerButton} onPress={() => navigation.navigate('Ropero')}>
+          <Text style={styles.buttonText}>Enviar</Text>
     </TouchableOpacity>
 </ImageBackground>
     );
@@ -49,6 +49,7 @@ const styles = StyleSheet.create({ //estilos
         color:'#fff',
         fontSize:14,
         marginBottom:20,
+        padding: 10,
     },
     input: {
       backgroundColor:'#FFF',
@@ -63,6 +64,7 @@ const styles = StyleSheet.create({ //estilos
     cajainput: {
       alignItems:'center',
       width:'80%',
+      marginTop: -10,
       
     },
     containerButton: {
@@ -74,6 +76,7 @@ const styles = StyleSheet.create({ //estilos
       paddingHorizontal: 12,
       width: '80%', 
       alignItems: 'center',
+      marginTop: 345,
     },
     buttonText: {
       color: 'white',
@@ -88,6 +91,12 @@ const styles = StyleSheet.create({ //estilos
         width: 30,  
         height: 30,
         transform: [{ rotate: '180deg' }],
+      },
+      titulo: {
+        fontSize: 16,
+        marginBottom: 5, 
+        color:'#FFF',
+        alignSelf: 'baseline',
       },
 });
 

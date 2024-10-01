@@ -51,11 +51,10 @@ function HomeScreen({ navigation }) {
       <Image source={require('../imagenes/facebook.png')} style={styles.imagen}></Image>
       <Image source={require('../imagenes/Google.png')} style={styles.imagen}></Image>
     </View>
-    <TouchableOpacity style={styles.containerButton}>
-          <Text style={styles.buttonText} onPress={() => navigation.navigate('Password')}>Registrar</Text>
+    <TouchableOpacity style={styles.containerButton} onPress={() => navigation.navigate('Password')}>
+          <Text style={styles.buttonText} >Registrar</Text>
     </TouchableOpacity>
     </View>
-    
     </ImageBackground>
   );
 }
@@ -72,7 +71,7 @@ const styles = StyleSheet.create({ //estilos
         fontSize: 32,
         fontWeight: 'bold',
         marginBottom: 5,
-        color:'#fff'
+        color:'#fff',
     },
     Button: {
         marginTop: 10,
