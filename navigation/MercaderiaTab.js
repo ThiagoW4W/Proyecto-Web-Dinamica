@@ -1,13 +1,14 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Inicio from '../Screens/Inicio'
-import BoleteriaMain from '../Screens/BoleteriaMain'
+import Boleteria from '../Screens/Boleteria'
 import Checklist from '../Screens/Checklist'
+import Mercaderia from '../Screens/Mercaderia';
 const BolTab = createBottomTabNavigator();
 export default function BolTabScreen() {
 
     return (
 
-        <BolTab.Navigator initialRouteName='Boleterias' screenOptions={()=>({
+        <BolTab.Navigator initialRouteName='Mercaderia' screenOptions={()=>({
             headerShown:false,
             
             tabBarStyle:{
@@ -16,24 +17,24 @@ export default function BolTabScreen() {
                 
             }
         })}>
-            <BolTab.Screen  name="Boleterias" component={BoleteriaMain}
+            <BolTab.Screen  name="merc" component={Mercaderia}
             options={{
-              title:"Boleteria",
+              title:"Mercaderia",
               
               
             }}
             />
           
-          <BolTab.Screen name="Secundario" component={Checklist}
+          <BolTab.Screen name="Principals" component={Inicio}
             options={{
-              title:"checklist",
+              title:"Inicio",
              
             }}
           />
-          <BolTab.Screen name="Principal" component={Inicio} 
+          <BolTab.Screen name="Secundarios" component={Boleteria} 
           options={{
             
-            title:"inicio",
+            title:"Boleteria",
           
           }}
          />

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
+import {useState} from "react";
 import { View,StyleSheet, Text, ImageBackground,Image, TouchableOpacity, FlatList} from 'react-native';
-import AppNavigator from './AppNavigator';
-const img = require ("../imagenes/fondo.jpeg")
+const img = require ("../fondo.jpg")
 
 function Ropero({ navigation }) {
     // Estados iniciales para los casilleros
@@ -59,6 +59,7 @@ const styles = StyleSheet.create({ //estilos
       width: '100%',
       height: '100%',
       position:'absolute'
+      
     },
     cajaderoperos: {
       display: 'flex',

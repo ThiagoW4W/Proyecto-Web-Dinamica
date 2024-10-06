@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
-import { StyleSheet,View,ImageBackground,Text,TouchableOpacity } from 'react-native';
-import AppNavigator from './AppNavigator';
+import { StyleSheet,View,ImageBackground,Text,TouchableOpacity,Image,ScrollView } from 'react-native';
 
-const img = require ("../imagenes/fondo.jpeg")
 
-function boleteria ({navigation}) {
+const img = require ("../fondo.jpg")
+
+function Boleteria ({navigation}) {
     return (
         <ImageBackground source={img} style={styles.container}>
         <Text style={styles.titulo}>Boleteria</Text>
         <Text style={styles.texto}>e ingresos</Text>
         
         <View style={styles.box}>
-            <View style={styles.navSup}>
+            <View style={styles.image}>
+                <TouchableOpacity onPress={() => navigation.navigate('Boleterias')}>
+                <Image source={require('../img/left.png')}></Image>
+                </TouchableOpacity>
             </View>
             <View style={styles.items}>
+            <ScrollView style={styles.scrollableView}>
                 <View style={styles.item}>
                     <View style={styles.circle}></View>
                     <View style={styles.object}>
@@ -22,14 +26,71 @@ function boleteria ({navigation}) {
                     <View style={styles.object}>
                         <Text>2</Text>
                     </View>
+                    
                 </View>
+                <View style={styles.item}>
+                    <View style={styles.circle}></View>
+                    <View style={styles.object}>
+                        <Text>Nombre</Text>
+                    </View>
+                    <View style={styles.object}>
+                        <Text>2</Text>
+                    </View>
+                    
+                </View>
+                <View style={styles.item}>
+                    <View style={styles.circle}></View>
+                    <View style={styles.object}>
+                        <Text>Nombre</Text>
+                    </View>
+                    <View style={styles.object}>
+                        <Text>2</Text>
+                    </View>
+                    
+                </View>
+                <View style={styles.item}>
+                    <View style={styles.circle}></View>
+                    <View style={styles.object}>
+                        <Text>Nombre</Text>
+                    </View>
+                    <View style={styles.object}>
+                        <Text>2</Text>
+                    </View>
+                    
+                </View>
+                <View style={styles.item}>
+                    <View style={styles.circle}></View>
+                    <View style={styles.object}>
+                        <Text>Nombre</Text>
+                    </View>
+                    <View style={styles.object}>
+                        <Text>2</Text>
+                    </View>
+                    
+                </View>
+                <View style={styles.item}>
+                    <View style={styles.circle}></View>
+                    <View style={styles.object}>
+                        <Text>Nombre</Text>
+                    </View>
+                    <View style={styles.object}>
+                        <Text>2</Text>
+                    </View>
+                    
+                </View>
+             
+              
                 
+                
+                
+                
+            </ScrollView>
             </View>
         </View>
         </ImageBackground>
     );
 }
-export default boleteria;
+export default Boleteria;
 const styles = StyleSheet.create({
 container:{
     flex: 1,
@@ -42,10 +103,12 @@ container:{
 box:{
     width:'70%',
     height:'80%',
-    backgroundColor:'white',
-    opacity: 0.7,
+    backgroundColor:'rgba(255,255,255,0.7);',
     top:20,
     borderRadius:10,
+    
+    
+    
 },
 titulo:{
 color:'white',
@@ -55,29 +118,20 @@ texto:{
 color:'white',
 top:10,
 },
-navSup:{
-width:'100%',
-height:'10%',
-borderTopStartRadius:10,
-borderTopEndRadius:10,
-borderBottomWidth:3,
-borderColor:'black',
-borderStyle:'solid',
-alignItems:'center',
-flexDirection:'row',
-justifyContent:'space-around'
-},
+
 items:{
 width:'100%',
-height:'80%',
+height:'90%',
 borderBottomLeftRadius:10,
 borderBottomRightRadius:10,
+
+
 
 },
 item:{
 backgroundColor:'black',
 width:'100%',
-height:'10%',
+height:40,
 display:'flex',
 flexDirection:'row',
 justifyContent:'space-around',
@@ -89,7 +143,6 @@ width:'13%',
 height:'85%',
 backgroundColor:'white',
 borderRadius:20,
-
 },
 object:{
 width:'35%',
@@ -119,6 +172,20 @@ Text:{
     borderBottomColor:'white',
     borderBottomWidth:2
 },
+image:{
+   
+    width:'100%',
+    height:'10%',
+    display:'flex',
+    justifyContent:'center',
+    
+    
+},
+scrollableView:{
+  objectFit:'contain',
+  width:'100%',
+  overflow:''
+}
 
 
 });

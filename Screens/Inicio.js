@@ -28,7 +28,7 @@ export default function Inicio() {
         <Text style={styles.texto}>Mercaderia</Text>
         </View>
         </Link>
-        <Link style={styles.second} to={{screen:'checklists'}}>
+        <Link style={styles.second} to={{screen:'Boleterias'}}>
         <View style={styles.box}>
         <Image
           style={styles.icons}
@@ -39,7 +39,7 @@ export default function Inicio() {
         </View>
         </Link>
         
-        <Link style={styles.second} to={{screen:'checklists'}}>
+        <Link style={styles.second} to={{screen:'zones'}}>
         <View style={styles.box}>
         <Image
           style={styles.icons}
@@ -72,8 +72,7 @@ export default function Inicio() {
     check: {
       width:'70%',
       height:'30%',
-      backgroundColor:'#fff',
-      opacity: 0.7,
+      backgroundColor:'rgba(255,255,255,0.7);',
       borderRadius:10,
       
       position:'relative',
@@ -94,8 +93,8 @@ export default function Inicio() {
     merc: {
       width:'70%',
       height:'15%',
-      backgroundColor:'#fff',
-      opacity: 0.7,
+      backgroundColor:'rgba(255,255,255,0.7);',
+     
       borderRadius:10,
      
       position:'relative',
@@ -125,8 +124,8 @@ export default function Inicio() {
     second: {
       width:'70%',
       height:'15%',
-      backgroundColor:'#fff',
-      opacity: 0.7,
+      backgroundColor:'rgba(255,255,255,0.7);',
+      
       borderRadius:10,
       
       position:'relative',
