@@ -1,59 +1,51 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, buttonText, Alert, ImageBackground, TouchableOpacity } from 'react-native';
-import backgroundImage from './imagen/fondo.jpg';
-
-export default function Login() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-
-  const handleSubmit = async () => { 
-    setErrorMessage('');
-
-    const response = await fetch('http://localhost:3000/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ username, password })
-    });
-
-    if (response.ok) {
-      Alert.alert('Contraseña correcta');
-    } else {
-      const error = await response.text();
-      setErrorMessage(error);
-    }
-  };
+import backgroundImage from '../fondo.jpg';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import {auth} from "../firebase/config"
+export default function Login({navigation}) {
+ const [email,setEmail]=useState("");
+ const [password,setPassword]=useState("");
+ const onHandleLogin=()=>{
+  if (email!=="" && password !==""){
+    signInWithEmailAndPassword(auth,email,password)
+    .then(()=>console.log("Login Success"))
+    .catch((err)=>Alert.alert("Login error",err.message))
+  }
+ }
 
   return (
     <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
     <View style={styles.container}>
       <Text style={styles.title}>Acceso</Text>
       <Text style={styles.subtitle}>Inicia seción para continuar</Text>
-      <Text style={styles.nom}>NOMBRE</Text>
+      <Text style={styles.nom}>EMAIL</Text>
       <TextInput
         style={styles.input}
         placeholder="Ingrese su usuario"
-        value={username}
-        onChangeText={setUsername}
         autoCapitalize="none"
+        value={email}
+        onChangeText={(text)=> setEmail(text)}
+        keyboardType="email-address"
+        textContentType='emailAddress'
       />
       <Text style={styles.contra}>CONTRASEÑA</Text>
       <TextInput 
         style={styles.input}
         placeholder="ingrese su contraseña"
+        secureTextEntry={true}
         value={password}
-        onChangeText={setPassword}
-        secureTextEntry
+        textContentType='password'
+        onChangeText={(text)=> setPassword(text)}
       />
-       <Text style={styles.olvide}>Olvidé mi contraseña</Text>
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+       <TouchableOpacity onPress={()=>navigation.navigate("password")}><Text style={styles.olvide}>Olvidé mi contraseña</Text></TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={onHandleLogin}>
         <Text style={styles.buttonText}>ingresar</Text>
       </TouchableOpacity>
-      {errorMessage ? <Text style={styles.errorMessage}>{errorMessage}</Text> : null}
     </View>
+    <TouchableOpacity onPress={()=>navigation.navigate("Registro")}>
     <Text style={styles.pregunta}>¿No tenes cuenta? Crea una aca!</Text>
+    </TouchableOpacity>
     </ImageBackground>
   );
 }

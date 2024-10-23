@@ -51,7 +51,7 @@ export default function Reservas ({navigation}) {
             </View>
             
             </ScrollView>
-            <TouchableOpacity onPress={() => navigation.navigate('bols')} style={styles.icono}>
+            <TouchableOpacity onPress={() => navigation.navigate('nuevaRes')} style={styles.icono}>
             <Image source={require('../img/add-button.png')}></Image>
             </TouchableOpacity>
          </View>

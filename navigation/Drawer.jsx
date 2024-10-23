@@ -2,13 +2,10 @@
 import Inicio from '../Screens/Inicio'
 import Checklist from '../Screens/Checklist'
 import Ropero from '../Screens/Ropero'
-import BoleteriaTab from '../navigation/BoleteriaTab'
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { Button } from 'react-native';
-import MercaderiaTab  from '../navigation/MercaderiaTab'
+
 import Mercaderia from '../Screens/Mercaderia';
 import Boleteria from '../Screens/Boleteria';
-import TabScreen from './Tab';
 import { MenuItems } from './DrawerContent';
 import Stock from '../Screens/Stock';
 import NuevoProducto from '../Screens/NuevoProducto'
@@ -17,6 +14,11 @@ import BoleteriaMain from '../Screens/BoleteriaMain';
 import Ventas from '../Screens/Ventas';
 import Reservas from '../Screens/Reservas';
 import NuevaVenta from '../Screens/NuevaVenta';
+import Login from '../Screens/login';
+import Registro from '../Screens/Registro'
+import Contraseña from '../Screens/Contrasena'
+import NuevaReserva from '../Screens/NuevaReserva';
+
 const drawer = createDrawerNavigator();
 export default function Drawer() {
   return (
@@ -55,7 +57,7 @@ export default function Drawer() {
          
          }}
          //Componente: Asignacion con la pantalla
-         component={TabScreen}
+         component={Inicio}
          
         
          
@@ -163,7 +165,41 @@ export default function Drawer() {
          }}
          //Componente: Asignacion con la pantalla
          component={NuevaVenta} />
+         <drawer.Screen name="nuevaRes" 
+         //Creacion Opcion Checklist
+         options={{
+           drawerLabel:"nueva",
+           title:"",
+         }}
+         //Componente: Asignacion con la pantalla
+         component={NuevaReserva} />
+
+         
+        <drawer.Screen name="Registro" 
+         //Creacion Opcion Checklist
+         options={{
+           drawerLabel:"Registro",
+           title:"",
+         }}
+         //Componente: Asignacion con la pantalla
+         component={Registro} />
+         <drawer.Screen name="Login" 
+         //Creacion Opcion Checklist
+         options={{
+           drawerLabel:"Login",
+           title:"",
+         }}
+         //Componente: Asignacion con la pantalla
+         component={Login} />
         
+        <drawer.Screen name="password" 
+         //Creacion Opcion Checklist
+         options={{
+           drawerLabel:"Password",
+           title:"",
+         }}
+         //Componente: Asignacion con la pantalla
+         component={Contraseña} />
           
        </drawer.Navigator>
      

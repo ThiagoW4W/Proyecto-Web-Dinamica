@@ -1,7 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
-
+import { getAuth } from 'firebase/auth';
+import { setPersistence,browserLocalPersistence } from 'firebase/auth';
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAEE3KOIuEtrrMMS4xjZeJMVa_NjFwRYDU",
@@ -15,6 +16,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
 // Initialize Firestore
 export const db = getFirestore(app);
+
+
+export const auth=getAuth();
+// Establece la persistencia

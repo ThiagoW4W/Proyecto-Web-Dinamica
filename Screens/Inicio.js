@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Checklist from '../Screens/Checklist'
 import { NavigationContainer } from '@react-navigation/native';
 const image= require("../fondo.jpg")
-import TabScreen from '../navigation/Tab';
+
 
 
 export default function Inicio() {

@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { View,StyleSheet, Text, ImageBackground,TextInput,Image, TouchableOpacity} from 'react-native';
-import AppNavigator from './AppNavigator';
-const img = require ("../imagenes/fondo.jpeg")
+
+const img = require ("../fondo.jpg")
 
 function  Contrasena ({ navigation }) {
     const [password, setPassword] = useState('');
     return (
 <ImageBackground source={img}style = {styles.container}>
-        <View style={styles.containerflecha}>
-            <Image source={require("../imagenes/flecha.png")} style = {styles.flecha}></Image>
-        </View>
+        <TouchableOpacity style={styles.containerflecha} onPress={()=>navigation.navigate("Login")}>
+            <Image source={require("../img/atras.png")} style = {styles.flecha}></Image>
+        </TouchableOpacity>
             <Text style = {styles.texto}>Cambiar Contraseña</Text>
             <Text style = {styles.subtexto}>Introduce el correo eléctronico que se encuentra asociado a tu cuenta para cambiar la Contraseña</Text>
     <View style = {styles.cajainput}>
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({ //estilos
       flecha: {
         width: 30,  
         height: 30,
-        transform: [{ rotate: '180deg' }],
+    
       },
       titulo: {
         fontSize: 16,

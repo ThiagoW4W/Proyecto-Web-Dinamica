@@ -1,15 +1,41 @@
  import { DrawerContentScrollView } from "@react-navigation/drawer"
 import React from "react";
 import {useState} from "react";
- import { TouchableOpacity,StyleSheet,Text,Image,View,Link,Modal } from "react-native"
- 
+ import { TouchableOpacity,StyleSheet,Text,Image,View,Modal,Linking } from "react-native"
+ import { signOut } from "firebase/auth";
+ import { auth } from "../firebase/config";
  
  export const MenuItems=({navigation})=>{
+    const [isBoleteriaOpen, setIsBoleteriaOpen] = useState(false);
+    const [isMercaderiaOpen, setIsMercaderiaOpen] = useState(false);
     const [visible, setVisible] = React.useState(false);
     const [isModalVisible, SetIsModalVisible] = useState(false);
     const [itsModalVisible, SetModalVisible] = useState(false);
+    const [selectedMethod, setSelectedMethod] = useState(null);
+
+    const handleSelectMethod = (method) => {
+        setSelectedMethod(method);
+    };
+    const handleCallPress=()=>{
+        Linking.openURL("tel:+542996083028")
+    };
+    const handleEmailPress=()=>{
+        Linking.openURL("mailto:antonellanairivera@gmail.com")
+    }
+    const handleConfirm = () => {
+        
+        if (selectedMethod==='Telefono'){
+           handleCallPress();
+        }else{
+            handleEmailPress();
+        }
+        SetModalVisible(false);
+    };
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
+  const onSignOut =()=>{
+    signOut(auth).catch(error=>console.log(error));
+}
     return(
       <DrawerContentScrollView style={Styles.container}  >
         <View style={Styles.box}>
@@ -36,18 +62,23 @@ import {useState} from "react";
             <Text style={Styles.button} onPress={()=>navigation.navigate('checklists')}>Checklist</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={Styles.Size}>
-            <Text style={Styles.button} onPress={()=>navigation.navigate('Boleterias')}>Boleteria</Text>
-        </TouchableOpacity>
+        <View style={Styles.desplegable}  >
+            <TouchableOpacity onPress={()=>navigation.navigate('Boleterias')}><Text style={Styles.buttonDesp}>Boleteria</Text></TouchableOpacity>
+            <TouchableOpacity style={Styles.img} onPress={() => setIsBoleteriaOpen(!isBoleteriaOpen)}><Image style={Styles.imagen} source={require("../img/flecha-hacia-abajo.png")}/></TouchableOpacity>
+        </View>
 
-        <TouchableOpacity style={Styles.Size}>
-            <Text style={Styles.dropdown} onPress={()=>navigation.navigate('Boleterias')}>Ventas</Text>  
-        </TouchableOpacity>
-
-        <TouchableOpacity style={Styles.Size}>
-            <Text style={Styles.dropdown} onPress={()=>navigation.navigate('Boleterias')}>Reservas</Text>
-        </TouchableOpacity>
-
+        {isBoleteriaOpen && (
+                
+                <View style={Styles.submenu}>
+                    <TouchableOpacity style={Styles.Size} onPress={() => navigation.navigate('ventas')}>
+                        <Text style={Styles.dropdown}>Ventas</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={Styles.Size} onPress={() => navigation.navigate('reserva')}>
+                        <Text style={Styles.dropdown}>Reservas</Text>
+                    </TouchableOpacity>
+                </View>
+               
+            )}
         <TouchableOpacity style={Styles.Size}>
             <Text style={Styles.button} onPress={()=>navigation.navigate('zones')}>Zonas</Text>
         </TouchableOpacity>
@@ -56,46 +87,60 @@ import {useState} from "react";
             <Text style={Styles.button} onPress={()=>navigation.navigate('ropero')}>Ropero</Text>   
         </TouchableOpacity>
 
-        <TouchableOpacity style={Styles.Size}>
-            <Text style={Styles.button} onPress={()=>navigation.navigate('mercaderias')}>Mercaderia</Text>
-        </TouchableOpacity>
+        <View style={Styles.desplegable}>
+            
+            <TouchableOpacity onPress={()=>navigation.navigate('mercaderias')}><Text style={Styles.buttonDesp} >Mercaderia</Text></TouchableOpacity>
+            <TouchableOpacity style={Styles.img} onPress={() => setIsMercaderiaOpen(!isMercaderiaOpen)}><Image style={Styles.imagen} source={require("../img/flecha-hacia-abajo.png")}  /></TouchableOpacity>
+            
+        </View>
 
+        {isMercaderiaOpen && (
+                    <View style={Styles.submenu}>
+                    <TouchableOpacity style={Styles.Size} onPress={() => navigation.navigate('mercaderias')}>
+                        <Text style={Styles.dropdown}>Lista productos</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={Styles.Size} onPress={() => navigation.navigate('stocks')}>
+                        <Text style={Styles.dropdown}>Stock</Text>
+                    </TouchableOpacity>
+                    </View>
+                
+            )}
         <TouchableOpacity style={Styles.Size}>
-            <Text style={Styles.dropdown} onPress={()=>navigation.navigate('Boleterias')}>Lista productos</Text>   
-        </TouchableOpacity>
-
-        <TouchableOpacity style={Styles.Size}>
-            <Text style={Styles.dropdown} onPress={()=>navigation.navigate('Boleterias')}>Stock</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={Styles.Size}>
-            <Text style={Styles.button2} onPress={()=>navigation.navigate('boleterias')}>Perfil</Text>
+            <Text style={Styles.button2} onPress={()=>navigation.navigate('Login')}>Perfil</Text>
         </TouchableOpacity>
         
         <TouchableOpacity style={Styles.Size}>
             <Text style={Styles.button2} onPress={()=>SetModalVisible(true)}>Contactanos</Text>
         </TouchableOpacity>
-        <Modal visible={itsModalVisible} animationType="slide"
-        transparent={true}>
+        <Modal visible={itsModalVisible} animationType="slide" transparent={true}>
             <View style={Styles.modalBox}>
                 <View style={Styles.modal}>
                     <View style={Styles.TextBox}>
-                         <Text style={Styles.textM}>¿Cómo desea contactarnos? </Text>
+                        <Text style={Styles.textM}>¿Cómo desea contactarnos?</Text>
                         <View style={Styles.position}>
-                            <TouchableOpacity style={Styles.cajita}>
+                            <TouchableOpacity
+                                style={[Styles.cajita,  selectedMethod === 'Correo' ? {backgroundColor: '#abb2b9'  } : {}]}
+                                onPress={() => handleSelectMethod('Correo')}
+                            >
                                 <Text>Correo</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={Styles.cajita}>
+                            <TouchableOpacity
+                                style={[Styles.cajita, selectedMethod === 'Telefono' ? {backgroundColor: '#abb2b9'  } : {}]}
+                                onPress={() => handleSelectMethod('Telefono')}
+                            >
                                 <Text>Telefono</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                     <View style={Styles.iconos}>
-                        <TouchableOpacity onPress={()=>SetModalVisible(false)} >
-                            <Image source={require("../img/circle-x_10489836.png")}></Image>
+                        <TouchableOpacity onPress={() => SetModalVisible(false)}>
+                            <Image source={require("../img/circle-x_10489836.png")} />
                         </TouchableOpacity>
-                        <TouchableOpacity >
-                            <Image source={require("../img/check.png")}></Image>
-                        </TouchableOpacity>
+                        {selectedMethod && (
+                            <TouchableOpacity onPress={handleConfirm}>
+                                <Image source={require("../img/check.png")} />
+                            </TouchableOpacity>
+                        )}
                     </View>
                 </View>
             </View>
@@ -118,7 +163,7 @@ import {useState} from "react";
                         <TouchableOpacity onPress={()=>SetIsModalVisible(false)} >
                             <Image source={require("../img/circle-x_10489836.png")}></Image>
                         </TouchableOpacity>
-                        <TouchableOpacity >
+                        <TouchableOpacity onPress={onSignOut} >
                             <Image source={require("../img/check.png")}></Image>
                         </TouchableOpacity>
                     </View>
@@ -150,7 +195,8 @@ import {useState} from "react";
         marginTop:'5%',
         width:'100%',
         display:'flex',
-        textAlign:'center'
+        textAlign:'center',
+       
     },
     inside:{
         color:'#fff',
@@ -161,9 +207,9 @@ import {useState} from "react";
     },
     dropdown:{
         color:'white',
-        backgroundColor:'gray',
+       
         textAlign:'right',
-        padding:5,
+        padding:10,
         marginTop:'2%'
     },
     icons:{
@@ -171,14 +217,14 @@ import {useState} from "react";
      
     },
     Size:{
-       
+        width:'100%',
     },
     button2:{
         color:'#fff',
         padding:10,
      
         marginTop:'2%',
-        width:'100%',
+        width:'80%',
         display:'flex',
         textAlign:'center'
     },
@@ -187,7 +233,7 @@ import {useState} from "react";
         padding:10,
      
         marginTop:'2%',
-        width:'100%',
+        width:'80%',
         display:'flex',
         textAlign:'center'
     },
@@ -244,6 +290,7 @@ import {useState} from "react";
         justifyContent:'center',
         borderRadius:10,
         
+        
     },
     position:{
         width:'100%',
@@ -253,7 +300,37 @@ import {useState} from "react";
         justifyContent:'space-around',
         top:'8%',
         
-    }
+    },
+    submenu:{
+        backgroundColor:'#212121',
+    },
+    desplegable:{
+        display:'flex',
+        flexDirection:'row',
+        width:'100%',
+        color:'#fff',
+        padding:15,
+        marginTop:'5%',
+        width:'100%',
+        display:'flex',
+        alignItems:'center',
+        justifyContent:'center'
+       
+    },
+    buttonDesp:{
+        textAlign:'center',  
+        color:'#fff',
+        
+    },
+    imagen:{
+       
+   
+    },
+    img:{
+        width:'15%',
+        height:'100%',
+        left:'300%'
+    },
 
   
   

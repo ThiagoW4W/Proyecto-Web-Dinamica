@@ -10,7 +10,7 @@ export default function Stock({navigation}) {
         
         <View style={styles.box}>
             <View style={styles.navSup}>
-            <TouchableOpacity onPress={() => navigation.navigate('checklists')}><Image source={require("../img/left.png")} style = {styles.imagen}></Image></TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('inicia')}><Image source={require("../img/left.png")} style = {styles.imagen}></Image></TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('mercaderias')}><Text style={styles.myText}>Lista</Text></TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('stocks')}><Text style={styles.Text}>Stock</Text></TouchableOpacity>
             </View>
