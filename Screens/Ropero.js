@@ -38,8 +38,8 @@ function Ropero({ navigation }) {
               <Text style={styles.buttonText} >Ver más</Text>
             </TouchableOpacity>
             
-            <TouchableOpacity onPress={() => navigation.navigate('emergente')}>
-              <Text style={styles.mas} > + </Text>
+            <TouchableOpacity onPress={() => navigation.navigate('NuevoRopero')}>
+              <Text style={styles.mas}> + </Text>
             </TouchableOpacity>
 
             </View>
