@@ -1,23 +1,44 @@
-import { StyleSheet,View,ImageBackground,Text,Image,TouchableOpacity,TextInput, } from 'react-native';
+import { StyleSheet,View,ImageBackground,Text,Image,TouchableOpacity,TextInput } from 'react-native';
+import { useState } from 'react';
 import * as React from 'react';
 import { Button, Checkbox } from 'react-native-paper';
+import { db } from '../firebase/config';
+import { collection, addDoc, getDocs, doc, deleteDoc} from 'firebase/firestore';
 const image= require("./../fondo.jpg")
 
 export default function AñadirProd({navigation}) {
-    const toggleCheckbox = (checkbox) => {
-        if (checkbox === 'uno') {
-            setChecked(true);
-            setChecked2(false);
-        } else {
-            setChecked(false);
-            setChecked2(true);
+    const [nombre, setNombre] = useState('');
+    const [precio, setPrecio] = useState('');
+    const [stock, setStock] = useState('');
+    const [categoria, setCategoria] = useState('');
+
+    const addProducto = async () => {
+        try {
+            await addDoc(collection(db, 'productos'), {
+                nombre,
+                precio,
+                stock,
+                categoria,
+            });
+            console.log('Producto agregado');
+            // Limpiar los campos después de agregar
+            setNombre('');
+            setPrecio('');
+            setStock('');
+            setCategoria('');
+        } catch (error) {
+            console.error('Error al agregar el producto: ', error);
         }
-        }
-    const [checked, setChecked, unchecked] = React.useState(false);
-    const [checked2, setChecked2, unchecked2] = React.useState(false);
-   
+    };
+
+
+    const toggleCheckbox = (option) => { //Esto es para que el valor de los checklist se actualice segun la opcción seleccionada
+        setCategoria(option);
+        console.log(`Opción seleccionada: ${option}`);
+    };
+        
+
     return (
-       
         <ImageBackground source={image} style={styles.container}>
            <Text style={styles.titulo}>Mercaderia</Text>
            <Text style={styles.texto}>Productos</Text>
@@ -28,46 +49,59 @@ export default function AñadirProd({navigation}) {
             </View>
             <View style={styles.producto}>
                 <View style={styles.position}>
-                    <View style={styles.cajita}>
+                    <View style={styles.cajita}> 
                         <View style={styles.name}>
-                            <Text>Nombre </Text>
+                        
+                            <Text >{nombre}</Text>
                         </View>
-                        <View style={styles.precio}>
-                            <Text>$</Text>
+                        <View style={styles.precio}> 
+                            <Text>
+                                $
+                                {precio}</Text>
                         </View>
                     </View>
                 </View>
                 <View style={styles.inp}>
                     <Text>Nombre del producto</Text>
-                    <TextInput style={styles.input} placeholder='Here'></TextInput>
+                        <TextInput
+                        style={styles.input}
+                        placeholder="Nombre"
+                        value={nombre}
+                        onChangeText={setNombre}
+                    />
                     <Text>Precio del producto</Text>
-                    <TextInput style={styles.input} placeholder='Here'></TextInput>
+                        <TextInput
+                        style={styles.input}
+                        placeholder="Precio"
+                        value={precio}
+                        onChangeText={setPrecio}
+                    />
                     <View style={styles.caja}>
                         <Text>Stock</Text>
-                        <TextInput style={styles.input} placeholder='Here'></TextInput>
+                        <TextInput
+                        style={styles.input}
+                        placeholder="stock"
+                        value={stock}
+                        onChangeText={setStock}
+                    />
                     </View>
                 <View style={styles.filtro}>
-                    <Text>Con alcohol</Text>
-                    <Checkbox name='uno'
-                    status={checked ? 'checked' : 'unchecked'}
-                    onPress={() => {
-                    toggleCheckbox('uno')
-                    }}
-                        />
-                    <Text>Sin alcohol</Text>
-                        <Checkbox 
-                    status={checked2 ? 'checked' : 'unchecked'}
-                    onPress={() => {
-                        
-                        toggleCheckbox('dos')
-               
-                    }}
-                        />
+                <Text>Con alcohol</Text>
+            <Checkbox
+                status={categoria === 'Con alcohol' ? 'checked' : 'unchecked'}
+                onPress={() => toggleCheckbox('Con alcohol')}
+            />
+            
+            <Text>Sin alcohol</Text>
+            <Checkbox
+                status={categoria === 'Sin alcohol' ? 'checked' : 'unchecked'}
+                onPress={() => toggleCheckbox('Sin alcohol')}
+            />
                 </View>
                    
                     <View style={styles.positionWidth}>
                     <TouchableOpacity style={styles.button}>
-                    <Text style={styles.boton}>Guardar</Text>
+                    <Text style={styles.boton} onPress={addProducto}>Enviar</Text>
                     </TouchableOpacity>
                     </View>
                     
