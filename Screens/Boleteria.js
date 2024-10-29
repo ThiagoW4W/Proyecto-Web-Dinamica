@@ -15,7 +15,7 @@ function Boleteria ({navigation}) {
                 <TouchableOpacity onPress={() => navigation.navigate('Boleterias')}>
                 <Image source={require('../img/left.png')}></Image>
                 </TouchableOpacity>
-            </View>
+            </View> 
             <View style={styles.items}>
             <ScrollView style={styles.scrollableView}>
                 <View style={styles.item}>

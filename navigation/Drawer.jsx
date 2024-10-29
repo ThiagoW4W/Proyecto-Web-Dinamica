@@ -3,7 +3,6 @@ import Inicio from '../Screens/Inicio'
 import Checklist from '../Screens/Checklist'
 import Ropero from '../Screens/Ropero'
 import { createDrawerNavigator } from '@react-navigation/drawer';
-
 import Mercaderia from '../Screens/Mercaderia';
 import Boleteria from '../Screens/Boleteria';
 import { MenuItems } from './DrawerContent';
@@ -18,6 +17,7 @@ import Login from '../Screens/login';
 import Registro from '../Screens/Registro'
 import Contraseña from '../Screens/Contrasena'
 import NuevaReserva from '../Screens/NuevaReserva';
+import NuevoRopero from '../Screens/NuevoRopero';
 
 const drawer = createDrawerNavigator();
 export default function Drawer() {
@@ -58,6 +58,20 @@ export default function Drawer() {
          }}
          //Componente: Asignacion con la pantalla
          component={Inicio}
+         
+        
+         
+         />
+        <drawer.Screen name="NuevoRopero"
+         //Creacion Opcion Inicio
+         options={{
+           drawerLabel:"NuevoRopero",
+           title:"",
+           
+         
+         }}
+         //Componente: Asignacion con la pantalla
+         component={NuevoRopero}
          
         
          
@@ -165,6 +179,8 @@ export default function Drawer() {
          }}
          //Componente: Asignacion con la pantalla
          component={NuevaVenta} />
+
+
          <drawer.Screen name="nuevaRes" 
          //Creacion Opcion Checklist
          options={{
@@ -200,7 +216,13 @@ export default function Drawer() {
          }}
          //Componente: Asignacion con la pantalla
          component={Contraseña} />
-          
+
+
+
+
+ 
+
+
        </drawer.Navigator>
      
   );}
