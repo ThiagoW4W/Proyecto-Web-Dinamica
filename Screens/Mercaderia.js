@@ -57,15 +57,15 @@ export default function Mercaderia({ navigation }) {
 
                         <View style={styles.ProductosContainer}>
                             {Productos.length > 0 ? (
-                                Productos.map((item) => (
-                                    <View style={styles.Productos} key={item.id}>
-                                        <View style={styles.item}>
+                                Productos.map((productos) => (
+                                    <View style={styles.Productos} key={productos.id}>
+                                        <View style={styles.productos}>
                                             <View style={styles.circle}></View>
                                             <View style={styles.object}>
-                                                <Text>{item.nombre ?? 'Sin nombre'}</Text>
+                                                <Text>{productos.nombre ?? 'Sin nombre'}</Text>
                                             </View>
                                             <View style={styles.object}>
-                                                <Text>{item.precio ?? 'Sin precio'}</Text>
+                                                <Text>{productos.precio ?? 'Sin precio'}</Text>
                                             </View>
                                         </View>
                                     </View>
@@ -94,12 +94,14 @@ export default function Mercaderia({ navigation }) {
 
 const styles = StyleSheet.create({
     mercaderiaContainer: {
+        display:'flex',
         alignProductos: 'center',
         justifyContent: 'center',
         width: 'auto',
         height: '100%',
     },
     box: {
+        
         width: '70%',
         height: '80%',
         backgroundColor: 'white',
@@ -140,7 +142,7 @@ const styles = StyleSheet.create({
         padding: 0,
         margin: 0,
     },
-    item: {
+    productos: {
         backgroundColor: 'black',
         width: '100%',
         height: 50, // Ajusta el tamaño según necesites
