@@ -15,7 +15,7 @@ function Emergenteropero({navigation}) {
     return (
         <ImageBackground source={img}style = {styles.container}>
            <TouchableOpacity onPress={() => navigation.native('')} style={styles.backButton}>
-              <Text style={styles.backButtonText}>←</Text>
+           <Image source={require("../img/atras.png")}></Image>
           </TouchableOpacity>
           <Text style = {styles.texto}>Ropero</Text>
             <View style={styles.caja}>

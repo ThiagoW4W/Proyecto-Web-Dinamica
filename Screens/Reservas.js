@@ -4,60 +4,63 @@ export default function Reservas ({navigation}) {
     
     return (
         <ImageBackground source={img} style={styles.container}>
-        <Text style={styles.titulo}>Reservas</Text>
-        <View style={styles.box}>
-            <Text style={styles.subtitulo}>Historial de Reserva</Text>
-            <ScrollView style={styles.scrollableView}>
-            <View style={styles.persona}>
-                <View style={styles.datos}>
-                </View>
-                <View style={styles.datos}>
-                </View>
-                <View style={styles.dni}>
-                </View>
+            <View style={styles.flechita}>
+                 <TouchableOpacity onPress={() => navigation.navigate('Boleterias')}><Image source={require("../img/atras.png")} style = {styles.flecha}></Image></TouchableOpacity>
             </View>
+            <Text style={styles.titulo}>Reservas</Text>
+            <View style={styles.box}>
+                <Text style={styles.subtitulo}>Historial de Reserva</Text>
+                <ScrollView style={styles.scrollableView}>
+                <View style={styles.persona}>
+                    <View style={styles.datos}>
+                    </View>
+                    <View style={styles.datos}>
+                    </View>
+                    <View style={styles.dni}>
+                    </View>
+                </View>
 
-            <View style={styles.persona}>
-                <View style={styles.datos}>
+                <View style={styles.persona}>
+                    <View style={styles.datos}>
+                    </View>
+                    <View style={styles.datos}>
+                    </View>
+                    <View style={styles.dni}>
+                    </View>
                 </View>
-                <View style={styles.datos}>
+                <View style={styles.persona}>
+                    <View style={styles.datos}>
+                    </View>
+                    <View style={styles.datos}>
+                    </View>
+                    <View style={styles.dni}>
+                    </View>
                 </View>
-                <View style={styles.dni}>
+                <View style={styles.persona}>
+                    <View style={styles.datos}>
+                    </View>
+                    <View style={styles.datos}>
+                    </View>
+                    <View style={styles.dni}>
+                    </View>
                 </View>
-            </View>
-            <View style={styles.persona}>
-                <View style={styles.datos}>
+                <View style={styles.persona}>
+                    <View style={styles.datos}>
+                    </View>
+                    <View style={styles.datos}>
+                    </View>
+                    <View style={styles.dni}>
+                    </View>
                 </View>
-                <View style={styles.datos}>
-                </View>
-                <View style={styles.dni}>
-                </View>
-            </View>
-            <View style={styles.persona}>
-                <View style={styles.datos}>
-                </View>
-                <View style={styles.datos}>
-                </View>
-                <View style={styles.dni}>
-                </View>
-            </View>
-            <View style={styles.persona}>
-                <View style={styles.datos}>
-                </View>
-                <View style={styles.datos}>
-                </View>
-                <View style={styles.dni}>
-                </View>
+                
+                </ScrollView>
+                <TouchableOpacity onPress={() => navigation.navigate('nuevaRes')} style={styles.icono}>
+                <Image source={require('../img/add-button.png')}></Image>
+                </TouchableOpacity>
             </View>
             
-            </ScrollView>
-            <TouchableOpacity onPress={() => navigation.navigate('nuevaRes')} style={styles.icono}>
-            <Image source={require('../img/add-button.png')}></Image>
-            </TouchableOpacity>
-         </View>
-        
-        
-        
+            
+            
         </ImageBackground>
     );
 }
@@ -127,5 +130,14 @@ const styles = StyleSheet.create({
             marginBottom:'2%',
             marginRight:'2%',
             top:'0.5%'
-          }
+          },
+          flecha: {
+            width: 30,  
+            height: 30,
+          },
+          flechita: {
+            position: 'absolute',
+            top: 20,
+            left: 40,
+          },
 });

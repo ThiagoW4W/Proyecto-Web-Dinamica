@@ -1,8 +1,9 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
 import { getAuth } from 'firebase/auth';
-import { setPersistence,browserLocalPersistence } from 'firebase/auth';
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAEE3KOIuEtrrMMS4xjZeJMVa_NjFwRYDU",
@@ -20,5 +21,18 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
 
-export const auth=getAuth();
+let auth;
+try {
+  auth = initializeAuth(app, {
+    persistence: getReactNativePersistence(ReactNativeAsyncStorage)
+  });
+} catch (error) {
+  if (error.code !== 'auth/already-initialized') {
+    throw error; // Rethrow if it's a different error
+  }
+  // Auth is already initialized, you can retrieve the existing instance
+  auth = getAuth(app);
+}
+
+export { auth };
 // Establece la persistencia

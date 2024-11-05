@@ -3,9 +3,9 @@ const img = require ("../fondo.jpg")
 export default function NuevaReserva ({navigation}) {
     return (
         <ImageBackground source={img} style={styles.container}>
-        <Text style={styles.titulo}>Venta Nueva</Text>
+        <Text style={styles.titulo}>Reserva Nueva</Text>
         <View style={styles.menu}>
-            <Image source={require('../img/left.png')}></Image>
+            <TouchableOpacity onPress={() => navigation.navigate('reserva')}><Image source={require('../img/left.png')}></Image></TouchableOpacity>
             <Text style={styles.texto}>Entradas</Text>
         </View>
         <View style={styles.vendidas}>

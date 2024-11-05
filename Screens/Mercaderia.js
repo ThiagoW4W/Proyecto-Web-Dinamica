@@ -1,4 +1,4 @@
-import { StyleSheet, View, ImageBackground, Text, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, ImageBackground, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { useState, useEffect } from 'react';
 import { db } from '../firebase/config';
 import { collection, getDocs } from 'firebase/firestore';
@@ -39,10 +39,12 @@ export default function Mercaderia({ navigation }) {
                 <Text style={styles.loadingText}>Cargando productos...</Text> // Mensaje mientras se cargan los datos
             ) : (
                 <>
+
                     <Text style={styles.tituloTexto}>Mercaderia</Text>
                     <Text style={styles.subtituloTexto}>Productos</Text>
 
                     <View style={styles.box}>
+                        
                         <View style={styles.navSup}>
                             <TouchableOpacity onPress={() => navigation.navigate('inicia')}>
                                 <Image source={require("../img/left.png")} style={styles.imagen} />
@@ -50,11 +52,9 @@ export default function Mercaderia({ navigation }) {
                             <TouchableOpacity onPress={() => navigation.navigate('mercaderias')}>
                                 <Text style={styles.navText}>Lista</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => navigation.navigate('stocks')}>
-                                <Text style={styles.navText}>Stock</Text>
-                            </TouchableOpacity>
+                            
                         </View>
-
+                        <ScrollView>
                         <View style={styles.ProductosContainer}>
                             {Productos.length > 0 ? (
                                 Productos.map((productos) => (
@@ -74,6 +74,7 @@ export default function Mercaderia({ navigation }) {
                                 <Text style={styles.loadingText}>No hay productos disponibles</Text>
                             )}
                         </View>
+                        </ScrollView>
 
                         <View style={styles.position}>
                             <View style={styles.buttons}>
@@ -97,12 +98,13 @@ const styles = StyleSheet.create({
         display:'flex',
         alignProductos: 'center',
         justifyContent: 'center',
+        alignItems:'center',
         width: 'auto',
         height: '100%',
     },
     box: {
         
-        width: '70%',
+        width: '80%',
         height: '80%',
         backgroundColor: 'white',
         opacity: 0.7,
@@ -128,6 +130,7 @@ const styles = StyleSheet.create({
         alignProductos: 'center',
         flexDirection: 'row',
         justifyContent: 'space-around',
+        alignItems:'center'
     },
     ProductosContainer: {
         width: '100%',
@@ -136,6 +139,8 @@ const styles = StyleSheet.create({
         flexDirection: 'column', // Para que se alineen verticalmente
         borderBottomLeftRadius: 10,
         borderBottomRightRadius: 10,
+        height:'80%',
+        
     },
     Productos: {
         width: '100%',
@@ -152,13 +157,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     circle: {
-        width: '13%',
-        height: '85%',
+        width: '25%',
+        height: '75%',
         backgroundColor: 'white',
-        borderRadius: 20,
+        borderRadius: 5,
     },
     object: {
-        width: '35%',
+        width: '30%',
         height: '75%',
         backgroundColor: 'white',
         borderRadius: 5,
@@ -167,22 +172,21 @@ const styles = StyleSheet.create({
         alignProductos: 'center',
     },
     buttons: {
-        width: '35%',
-        height: '10%',
-        position: 'relative',
+        width: '100%',
+        height: '100%',
         borderBottomLeftRadius: 10,
         borderBottomRightRadius: 10,
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignProductos: 'center',
+        alignItems:'center'
     },
     position: {
         width: '100%',
-        height: '1200%',
+        height: '10%',
         position: 'relative',
         display: 'flex',
-        marginLeft: '65%',
     },
     navText: {
         color: 'black',

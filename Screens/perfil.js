@@ -1,80 +1,66 @@
 import React, { useState } from 'react';
-import { View,StyleSheet, Text, ImageBackground,TextInput, TouchableOpacity} from 'react-native';
-import AppNavigator from './AppNavigator';
+import { View,StyleSheet, Text, ImageBackground,TextInput, TouchableOpacity,Image,Modal} from 'react-native';
 
-const img = require ("../imagenes/fondo.jpeg")
+
+const img = require ("../fondo.jpg")
 
 function Perfil({ navigation }) {
-    const [nombre, setNombre] = useState('incial');
-    const [dni, setDni] = useState('DNI');
-    const [apellido, setApellido] = useState('');
-    const [email, setEmail] = useState('');
-    const [domicilio, setDomicilio] = useState('');
-    const [contraseña, setContraseña] = useState('');
-    const [foto, setFoto] = useState('Foto');
-
-    const handleAgregar = () => {
-      // Aquí iría la lógica para manejar la información agregada
-    
-  };
-
+  const [isModalVisible, SetIsModalVisible] = useState(false);
+  const [editable, setEditable] = useState(false); 
+  const [isEditing,SetIsEditing]= useState(false)
+  function editar(){
+    setEditable(true);
+      SetIsModalVisible(false);
+      SetIsEditing(true);
+  }
     return (
         <ImageBackground source={img}style = {styles.container}>
-           <TouchableOpacity onPress={() => navigation.native('')} style={styles.flecha}>
-              <Text style={styles.flechita}>←</Text>
-          </TouchableOpacity>
-          <Text style = {styles.texto}>Perfil</Text>
-            <View style={styles.caja}>
-            <View style={styles.label}>
-            <Text style={styles.label}>PERSONA</Text>
+          <Text style={styles.titulo}>Perfil</Text>
+           <View style={styles.divider}>
+            <TouchableOpacity onPress={() => navigation.navigate('inicia')}><Image source={require("../img/atras.png")}></Image></TouchableOpacity>
+            <Text style={styles.texto}>Usuario</Text>
+           </View>
+           <View style={styles.infoBox}>
+              <View style={styles.dev}>
+              <TouchableOpacity onPress={()=>SetIsModalVisible(true)} style={styles.icon}><Image source={isEditing ? require("../img/circle-x_10489836.png") : require("../img/edit.png")} /></TouchableOpacity>
+              </View>
+              <Modal visible={isModalVisible} animationType="slide"
+        transparent={true}>
+            <View style={styles.modalBox}>
+                <View style={styles.modal}>
+                    <View style={styles.TextBox}>
+                         <Text style={styles.textM}>¿Estás seguro Que deseas </Text>
+                         <Text style={styles.textM}>Editar el perfil?</Text>
+                    </View>
+                    <View style={styles.iconos}>
+                        <TouchableOpacity onPress={()=>SetIsModalVisible(false)} >
+                            <Image source={require("../img/circle-x_10489836.png")}></Image>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={editar} >
+                            <Image source={require("../img/check.png")}></Image>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </View>
-            <View style={styles.divider} />
-        
-            <View style={styles.roperoContainer}>
-                    <Text style={styles.foto}>{foto}</Text>  
-                  <Text style={styles.Dni}>{dni}</Text>
-                  
-            </View>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Nombre"
-                    value={nombre}
-                    onChangeText={setNombre}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Apellido"
-                    value={apellido}
-                    onChangeText={setApellido}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="DNI"
-                    value={dni}
-                    onChangeText={setDni}
-                />
-                 <TextInput
-                    style={styles.input}
-                    placeholder="Email"
-                    value={email}
-                    onChangeText={setEmail}
-                />
-                 <TextInput
-                    style={styles.input}
-                    placeholder="Domicilio"
-                    value={domicilio}
-                    onChangeText={setDomicilio}
-                />
-                 <TextInput
-                    style={styles.input}
-                    placeholder="Restablecer Contraseña"
-                    value={contraseña}
-                    onChangeText={setContraseña}
-                />
-              <TouchableOpacity style={styles.containerButton} onPress={() => navigation.navigate('boleteria')}>
-                <Text style={styles.buttonText}>Guardar</Text>
-              </TouchableOpacity>
-            </View>
+        </Modal>
+              <View style={styles.imageBox}>
+                <View style={styles.whiteBox}>
+                     <View style={styles.foto}><Text style={styles.texto2}>Foto</Text></View>
+                     <View style={styles.dni}><Text style={styles.texto2}>Dni</Text></View>
+                </View>
+                
+              </View>
+              <View style={styles.inputs}>
+                <TextInput  editable={editable} style={styles.input}>Nombre</TextInput>
+                <TextInput  editable={editable} style={styles.input}>Apellido</TextInput>
+                <TextInput  editable={editable} style={styles.input}>Dni</TextInput>
+                <TextInput editable={editable} style={styles.input}>Email</TextInput>
+                <TextInput editable={editable} style={styles.input}>Contraseña</TextInput>
+              </View>
+              <View style={styles.buttonBox}>
+                <TouchableOpacity style={styles.button}><Text style={styles.texto}>Guardar</Text></TouchableOpacity>
+              </View>
+           </View>
         </ImageBackground>
         
     );
@@ -88,91 +74,140 @@ const styles = StyleSheet.create({ //estilos
       width: '100%',
       height: '100%',
     },
-    divider: {
-      width: '115%', 
-      height: 1,  
-      backgroundColor: '#000', 
-      marginTop:-40, 
-      marginBottom: 45,
+    divider:{
+      width:'80%',
+      height:'8%',
+      backgroundColor:'rgba(255,255,255,0.7);',
+      borderTopLeftRadius:10,
+      borderTopRightRadius:10,
+      display:'flex',
+      flexDirection:'row',
+      alignItems:'center',
+      
     },
-    flecha: {
-      top: 86,
-      right:140 ,
-      padding: 10,
-      backgroundColor: 'transparent',
+    texto:{
+      color:'#fff',
+      fontSize:20,
+      marginLeft:'30%'
     },
-    flechita: {
-      fontSize: 24,
-      color: '#fff',
+    titulo:{
+      color:'#fff',
+      fontSize:40
     },
-    foto: {
-        fontSize: 40,
-        fontWeight: 'bold',
-        color: '#000',
-      },
-    Dni: {
-        fontSize: 18,
-        color: '#000',
-      },
-    texto: {
-        textAlign: 'center',
-        fontSize: 32,
-        fontWeight: 'bold',
-        marginBottom: -5,
-        color: '#fff',
+    infoBox:{
+      width:'80%',
+      height:'70%',
+      backgroundColor:'rgba(255,255,255,0.7);',
+      top:'0.5%',
+      borderBottomLeftRadius:10,
+      borderBottomRightRadius:10
     },
-    caja: {
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        width: '80%',
-        backgroundColor: '#FFF',
-        height: 650,
-        marginBottom: 90,
-        borderRadius: 12,
-        opacity: 0.65,
-        padding: 20,
-    },
-    label: {
-      textAlign: 'center',
-      fontSize: 18,
-      fontWeight: 'bold',
-      color: '#333',
-      marginTop: -5,
-      marginBottom: 20,
-    },
-    roperoContainer: {
-      alignItems: 'center',
-      marginBottom: 20,
-      backgroundColor: '#fff',
-      height: 120,
-      width:120,
+    dev:{
+      width:'100%',
+      height:'10%',
+      alignItems:'flex-end',
       justifyContent:'center',
-      borderRadius: 12,
+      
     },
-    input: {
-      width: '100%',
-      height: 40,
-      backgroundColor: '#fff',
-      borderRadius: 8,
-      marginVertical: 10,
-      paddingHorizontal: 10,
-      borderWidth: 1,
-      borderColor: '#C0C0C0',
+    icon:{
+      right:'3%'
+    },
+    imageBox:{
+      width:'100%',
+      height:'30%',
+      justifyContent:'center',
+      alignItems:'center'
+    },
+    whiteBox:{
+      width:'40%',
+      height:'80%',
+      backgroundColor:'#fff'
+    },
+    foto:{
+      width:'100%',
+      height:'65%',
+      justifyContent:'center',
+      borderBottomColor:'#000',
+      borderBottomWidth:1,
+      alignItems:'center'
+    },
+    dni:{
+      width:'100%',
+      height:'35%',
+      left:'5%'
+
+    },
+    texto2:{
+      color:'#000',
+      fontSize:20,
+    },
+    inputs:{
+      width:'100%',
+      height:'45%',
+    },
+    buttonBox:{
+      width:'100%',
+      height:'15%',
+      backgroundColor:'lightgray',
+      alignItems:'center',
+      justifyContent:'center',
+    },
+    button:{
+      width:'60%',
+      height:'60%',
+      justifyContent:'center',
+      borderColor:'#fff',
+      borderWidth:2,
+      borderRadius:20,
+     
+      
+    },
+    input:{
+      borderBottomColor:'#000',
+      borderBottomWidth:1,
+      width:'95%',
+      height:38
+    },
+    modal:{
+      width:'90%',
+      height:'25%',
+      backgroundColor:'lightgray',
+      borderRadius:10,
+      
+       alignItems:'center',
+      display:'flex',
+      justifyContent:'space-between'
   },
-  containerButton: {
-    backgroundColor: 'transparet',  
-    borderRadius: 12, 
-    borderColor: 'white',
-    borderWidth: 2,
-    paddingVertical: 9,
-    paddingHorizontal: 12,
-    width: '80%', 
-    alignItems: 'center',
-    marginTop: 10,
+  modalBox:{
+      width:'100%',
+      height:'100%',
+      backgroundColor:'black',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      alignItems:'center',
+      display:'flex',
+      justifyContent:'center'
+      
+      
+      
   },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
+  textM:{
+      fontSize:15
   },
-  
+  TextBox:{
+     marginTop:'5%',
+      width:'80%',
+      height:'30%',
+      display:'flex',
+      alignItems:'center'
+  },
+  iconos:{
+    
+    width:'40%',
+    height:'20%',
+    bottom:'5%',
+    display:'flex',
+    flexDirection:'row',
+    justifyContent:'space-around',
+    alignItems:'center'
+  },
 });

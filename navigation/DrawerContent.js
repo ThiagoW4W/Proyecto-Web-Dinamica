@@ -106,7 +106,7 @@ import {useState} from "react";
                 
             )}
         <TouchableOpacity style={Styles.Size}>
-            <Text style={Styles.button2} onPress={()=>navigation.navigate('Login')}>Perfil</Text>
+            <Text style={Styles.button2} onPress={()=>navigation.navigate('perfil')}>Perfil</Text>
         </TouchableOpacity>
         
         <TouchableOpacity style={Styles.Size}>

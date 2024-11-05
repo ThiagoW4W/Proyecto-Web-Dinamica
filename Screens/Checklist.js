@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, FlatList, TouchableOpacity, StyleSheet,ImageBackground } from 'react-native';
+import { View, Text, TextInput, Button, FlatList, TouchableOpacity, StyleSheet,ImageBackground,Image } from 'react-native';
 import { db } from '../firebase/config';
 import { collection, addDoc, getDocs, doc, deleteDoc} from 'firebase/firestore';
 const image= require("../fondo.jpg")
-function Checklist() {
+function Checklist({navigation}) {
   // Estado para la lista de tareas
   const [tareas, setTarea] = useState([]);
   // Estado para el nuevo ítem del input
@@ -79,6 +79,9 @@ function Checklist() {
 
   return (
     <ImageBackground source={image} style={styles.container}>
+      <View style={styles.flechita}>
+      <TouchableOpacity onPress={() => navigation.navigate('inicia')}><Image source={require("../img/atras.png")} style = {styles.flecha}></Image></TouchableOpacity>
+      </View>
     <View style={styles.cajaBlanca}>
       <Text style={styles.titulo}>Checklist</Text>
       <View style={styles.form}>
@@ -163,6 +166,15 @@ const styles = StyleSheet.create({
   completedTarea: {
     textDecorationLine: 'line-through',
     color: 'grey',
+  },  
+  flecha: {
+    width: 30,  
+    height: 30,
+  },
+  flechita: {
+    position: 'absolute',
+    top: 40,
+    left: 20,
   },
 });
 

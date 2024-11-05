@@ -18,7 +18,8 @@ import Registro from '../Screens/Registro'
 import Contraseña from '../Screens/Contrasena'
 import NuevaReserva from '../Screens/NuevaReserva';
 import NuevoRopero from '../Screens/NuevoRopero';
-
+import Perfil from '../Screens/perfil';
+import NuevoIncidente from '../Screens/NuevoIncidente'
 const drawer = createDrawerNavigator();
 export default function Drawer() {
   return (
@@ -216,6 +217,23 @@ export default function Drawer() {
          }}
          //Componente: Asignacion con la pantalla
          component={Contraseña} />
+            <drawer.Screen name="perfil" 
+         //Creacion Opcion Checklist
+         options={{
+           drawerLabel:"Perfil",
+           title:"",
+         }}
+         //Componente: Asignacion con la pantalla
+         component={Perfil} />
+
+              <drawer.Screen name="incidente" 
+         //Creacion Opcion Checklist
+         options={{
+           drawerLabel:"Incidente",
+           title:"",
+         }}
+         //Componente: Asignacion con la pantalla
+         component={NuevoIncidente} />
 
 
 

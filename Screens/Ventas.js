@@ -4,6 +4,9 @@ export default function Ventas ({navigation}) {
     
     return (
         <ImageBackground source={img} style={styles.container}>
+             <View style={styles.flechita}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Boleterias')}><Image source={require("../img/atras.png")} style = {styles.flecha}></Image></TouchableOpacity>
+                </View>
         <Text style={styles.titulo}>Ventas</Text>
         <View style={styles.box}>
             <Text style={styles.subtitulo}>Historial de Venta</Text>
@@ -127,5 +130,14 @@ const styles = StyleSheet.create({
             marginBottom:'2%',
             marginRight:'2%',
             top:'0.5%'
-          }
+          },
+          flecha: {
+            width: 30,  
+            height: 30,
+          },
+          flechita: {
+            position: 'absolute',
+            top: 20,
+            left: 40,
+          },
 });

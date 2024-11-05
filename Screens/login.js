@@ -10,7 +10,29 @@ export default function Login({navigation}) {
   if (email!=="" && password !==""){
     signInWithEmailAndPassword(auth,email,password)
     .then(()=>console.log("Login Success"))
-    .catch((err)=>Alert.alert("Login error",err.message))
+    .catch((err)=>{
+      let errorMessage;
+      switch (err.code){
+        case 'auth/invalid-email':
+            errorMessage = "El formato del correo electrónico no es válido.";
+            break;
+          case 'auth/user-disabled':
+            errorMessage = "Este usuario ha sido deshabilitado.";
+            break;
+          case 'auth/user-not-found':
+            errorMessage = "No se encontró un usuario con ese correo electrónico.";
+            break;
+          case 'auth/wrong-password':
+            errorMessage = "La contraseña es incorrecta.";
+            break;
+          default:
+            errorMessage = "Error de inicio de sesión. Por favor, intenta de nuevo.";
+            break;
+      }
+      Alert.alert("Error de inicio de sesión", errorMessage);
+    })
+  }else {
+    Alert.alert("Error", "Por favor, completa todos los campos.");
   }
  }
 

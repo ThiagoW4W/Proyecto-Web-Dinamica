@@ -6,7 +6,7 @@ export default function NuevaVenta ({navigation}) {
         <ImageBackground source={img} style={styles.container}>
         <Text style={styles.titulo}>Venta Nueva</Text>
         <View style={styles.menu}>
-            <Image source={require('../img/left.png')}></Image>
+            <TouchableOpacity onPress={() => navigation.navigate('ventas')}><Image source={require('../img/left.png')}></Image></TouchableOpacity>
             <Text style={styles.texto}>Entradas</Text>
         </View>
         <View style={styles.vendidas}>

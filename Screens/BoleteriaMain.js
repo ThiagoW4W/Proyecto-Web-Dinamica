@@ -5,6 +5,9 @@ export default function BoleteriaMain ({navigation}) {
     return (
         <ImageBackground source={img} style={styles.container}>
            <View style={styles.textos}>
+                <View style={styles.flechita}>
+                        <TouchableOpacity onPress={() => navigation.navigate('inicia')}><Image source={require("../img/atras.png")} style = {styles.flecha}></Image></TouchableOpacity>
+                </View>
                 <Text style={styles.titulo}>Boleteria</Text>
                 <Text style={styles.textito}>e ingresos</Text>
             </View>
@@ -62,7 +65,7 @@ export default function BoleteriaMain ({navigation}) {
                 </View>
                 <View style={styles.btn}>
                     <TouchableOpacity style={styles.botton} onPress={() => navigation.navigate('bols')}><Text style={styles.textito}>Ver Más</Text></TouchableOpacity>
-                    <TouchableOpacity><Image style={styles.images} source={require('../img/add-button.png')}></Image></TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('incidente')}><Image style={styles.images} source={require('../img/add-button.png')}></Image></TouchableOpacity>
                 </View>
                 </View>
         
@@ -199,5 +202,14 @@ const styles = StyleSheet.create({
         borderWidth:2,
         borderColor:'#fff',
        
-    },
+    }, 
+  flecha: {
+    width: 30,  
+    height: 30,
+  },
+  flechita: {
+    position: 'absolute',
+    top: 20,
+    left: 40,
+  },
 });

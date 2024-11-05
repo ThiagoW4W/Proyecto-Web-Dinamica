@@ -3,7 +3,7 @@ import { ImageBackground, StyleSheet, Text, View, Image,TouchableOpacity } from 
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 
-export default function Zonas(){
+export default function Zonas({navigation}){
   return (
     <ImageBackground source={require('../fondo.jpg')} style={styles.fondo}>
       <View style={styles.container}>
@@ -11,12 +11,13 @@ export default function Zonas(){
       </View>
       <View style={styles.degrado}>
         <View style={styles.flecha}>
-          <TouchableOpacity style={styles.icon}>
-            <Image  source={require('../img/left.png')}></Image>
+          <TouchableOpacity style={styles.icon} onPress={() => navigation.navigate('inicia')}>
+            <Image  source={require('../img/atras.png')}></Image>
           </TouchableOpacity>
+          <TouchableOpacity style={styles.button}><Text style={styles.textButton}>Cargar Img</Text></TouchableOpacity>  
         </View>
         <View style={styles.container2}>
-          <Image style={styles.stretch} source= {require('../img/plano2.png')} />        
+          <Image style={styles.stretch} source= {require('../img/plano2.png')} />      
         <View style={styles.opciones}> 
             <Text style={styles.opcionesTexto}>Pasillo</Text>
             <Text style={styles.opcionesTexto}>Planta alta</Text>
@@ -43,12 +44,12 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     display: 'flex',
     alignItems:'center',
-    justifyContent: 'center',
+
   },
   container: {
     width:'100%',
     height:'10%',
-    top:'10%',
+
   },
   titulo: {
     color: 'white',
@@ -59,22 +60,21 @@ const styles = StyleSheet.create({
     textAlignVertical:'center'
   },
   degrado: {
-    flex:1,
+   
     width:'80%',
-    height:'550%',
+    height:'85%',
     borderRadius: 12,
     backgroundColor:'rgba(255,255,255,0.7);',
     alignItems:'center',
-    justifyContent: 'flex-start',
-    top:'10%',
-    marginBottom:100,
+    top:'2%',
+    
     
   },
   container2: {
     display:'flex', 
     width:'80%',
     height:'40%',
-    top:'5%',
+    
   },
 
   opciones: {
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     overflow:'hidden',
     top:'10%',
-    height:'100%'
+    height:'100%',
   },
   opcionesTexto:{
    color:'#000',
@@ -98,11 +98,26 @@ const styles = StyleSheet.create({
     height:'10%',
     width:'100%',
     display:'flex',
-    justifyContent:'center',
-  
+    justifyContent:'space-between',
+    flexDirection:'row',
+    alignItems:'center',
+
     
   },  
   icon:{
-     left:'2%'
+     left:'5%'
+  },
+  button:{
+    width:100,
+    height:35,
+    right:'10%',
+    borderRadius:10,
+    borderColor:'#fff',
+    borderWidth:2,
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  textButton:{
+    color:'#fff'
   }
 })

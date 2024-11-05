@@ -12,9 +12,33 @@ function HomeScreen({ navigation }) {
     if (email !== '' && password !== ''){
       createUserWithEmailAndPassword(auth,email,password)
       .then(()=>console.log('Signup success'))
-      .catch((err)=>Alert.alert("Login error",err.message));
-    } 
+      .catch((err) => {
+        let errorMessage;
+
+        switch (err.code) {
+          case 'auth/invalid-email':
+            errorMessage = "El formato del correo electrónico no es válido.";
+            break;
+          case 'auth/email-already-in-use':
+            errorMessage = "El correo electrónico ya está en uso.";
+            break;
+          case 'auth/operation-not-allowed':
+            errorMessage = "La operación no está permitida.";
+            break;
+          case 'auth/weak-password':
+            errorMessage = "La contraseña es demasiado débil.";
+            break;
+          default:
+            errorMessage = "Error en el registro. Por favor, intenta de nuevo.";
+            break;
+        }
+
+        Alert.alert("Error de registro", errorMessage);
+      });
+  } else {
+    Alert.alert("Error", "Por favor, completa todos los campos.");
   }
+};
 
 
 
@@ -27,8 +51,8 @@ function HomeScreen({ navigation }) {
       <Text style = {styles.subtexto}>¿Ya registrado? Entre aqui</Text>
 
     <View style = {styles.cajainput}>
-      <Text style={styles.titulo}>Nombre</Text>
-      <TextInput style = {styles.input}
+      <Text  style={styles.titulo}>Nombre</Text>
+      <TextInput placeholder='Nombre' style = {styles.input}
           
           />
           <Text style={styles.titulo}>Email</Text>
@@ -54,9 +78,8 @@ function HomeScreen({ navigation }) {
           <Text style={styles.titulo}>DNI</Text>
           <TextInput style = {styles.input}
             placeholder="DNI"
-            maxLength={40}
+            maxLength={8}
             selectionColor="fff"
-            secureTextEntry={true}
           />
     <View style={styles.logos}>
       <TouchableOpacity><Image source={require('../img/facebook.png')} style={styles.imagen}></Image></TouchableOpacity>
