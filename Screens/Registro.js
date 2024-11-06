@@ -1,17 +1,41 @@
 //página principal
 import React, { useState } from 'react';
 import { View,StyleSheet, Text, Button, ImageBackground,TextInput,Image, TouchableOpacity, Alert} from 'react-native';
+import { db } from '../firebase/config';
+import { collection, addDoc,} from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase/config';
 const img = require ("../fondo.jpg")
 
 function HomeScreen({ navigation }) {
+  
   const [email,setEmail]=useState('');
   const [password,setPassword]=useState('');
   const onHandleSignup=()=>{
+    
     if (email !== '' && password !== ''){
       createUserWithEmailAndPassword(auth,email,password)
-      .then(()=>console.log('Signup success'))
+      .then(()=> {
+        console.log('Registro Exitoso :P')
+        const addUser = async () => {
+          try {
+            await addDoc(collection(db, 'Users'), {
+              email,
+              password
+            });
+            console.log('Datos cargados a la Base de datos');
+            // Limpiar los campos después de agregar
+            setEmail('');
+            setPassword('');
+          } catch (error) {
+            console.error('Error cargar Usuario a la BD: ', error);
+          }
+        };
+        
+        // Ejecutamos addUser aquí
+        addUser();
+      })
+   
       .catch((err) => {
         let errorMessage;
 
@@ -85,7 +109,7 @@ function HomeScreen({ navigation }) {
       <TouchableOpacity><Image source={require('../img/facebook.png')} style={styles.imagen}></Image></TouchableOpacity>
       <TouchableOpacity><Image source={require('../img/google.png')} style={styles.imagen}></Image></TouchableOpacity>
     </View>
-    <TouchableOpacity style={styles.containerButton} onPress={onHandleSignup}>
+    <TouchableOpacity style={styles.containerButton} onPress={onHandleSignup} >
           <Text style={styles.buttonText}>Registrar</Text>
     </TouchableOpacity>
     </View>
