@@ -1,118 +1,134 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, FlatList, TouchableOpacity, StyleSheet,ImageBackground,Image } from 'react-native';
-import { db } from '../firebase/config';
-import { collection, addDoc, getDocs, doc, deleteDoc} from 'firebase/firestore';
-const image= require("../fondo.jpg")
-function Checklist({navigation}) {
-  // Estado para la lista de tareas
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Text, TextInput, Button, FlatList, TouchableOpacity, StyleSheet, ImageBackground, Image } from 'react-native';
+import { db } from '../firebase/config'; 
+import { collection, addDoc, getDocs, doc, deleteDoc } from 'firebase/firestore';
+import Toast from 'react-native-toast-message';
+const image = require("../fondo.jpg");
+
+function Checklist({ navigation }) {
   const [tareas, setTarea] = useState([]);
-  // Estado para el nuevo ítem del input
   const [nuevaTarea, setnuevaTarea] = useState('');
 
-  // Función que se llama cuando se envía el formulario
   const handleSubmit = () => {
     if (nuevaTarea.trim() !== "") {
-      setTarea([...tareas, { text: nuevaTarea, completed: false }]);
-      setnuevaTarea('');  // Limpiar el input
-      AddTarea();         // Llama a la función para agregar la tarea a Firestore
-      getTareas();        // Llama a la función para obtener las tareas al iniciar
+      AddTarea();
+      setnuevaTarea('');
     }
   };
 
-  // Función para marcar una tarea como completada
-  const marcarTarea = (index) => {
-    const TareaActualizada = tareas.map((tarea, i) =>
-      i === index ? { ...tarea, completed: !tarea.completed } : tarea
+  const marcarTarea = (id, estadoActual) => {
+    const TareaActualizada = tareas.map((tarea) =>
+      tarea.id === id ? { ...tarea, Estado: !estadoActual } : tarea
     );
     setTarea(TareaActualizada);
   };
 
-  // Función para agregar una tarea a la colección "Tareas"
   const AddTarea = async () => {
     try {
-      await addDoc(collection(db, 'Tareas'), {
-        
-        Descripcion: nuevaTarea,  // Guardar la descripción
-        Estado: false             // Estado inicia como 'no completado'
-        
+      const docRef = await addDoc(collection(db, 'checklist'), {
+        Descripcion: nuevaTarea,
+        Estado: false
       });
+
       console.log('Tarea agregada');
-   
+      Toast.show({
+        type: 'success',
+        text1: 'Tarea agregada!',
+        position: 'top',
+        visibilityTime: 3000,
+    });
+      setTarea([...tareas, { id: docRef.id, Descripcion: nuevaTarea, Estado: false }]);
     } catch (error) {
       console.error('Error al agregar tarea: ', error);
     }
   };
+
   const borrarTarea = async (id) => {
-    try {
-      const tareaRef = doc(db, 'Tareas', id); // El id de la tarea a eliminar
-      await deleteDoc(tareaRef); // Eliminar la tarea asignada
+    try { 
+      const tareaRef = doc(db, 'checklist', id);
+      await deleteDoc(tareaRef);
       console.log('Tarea eliminada');
-      
-      setTarea(prevTareas => prevTareas.filter(tarea => tarea.id !== id)); //La borra visualmente
+      setTarea((prevTareas) => prevTareas.filter((tarea) => tarea.id !== id));
+      Toast.show({
+        type: 'error',
+        text1: 'Tarea eliminada!',
+        position: 'top',
+        visibilityTime: 3000,
+    });
     } catch (error) {
       console.error('Error al eliminar tarea: ', error);
     }
   };
-  
 
-  // Función para obtener las tareas de la colección "Tareas"
-  const getTareas = async () => {
+  const getTareas = async () => { 
     try {
-      const querySnapshot = await getDocs(collection(db, 'Tareas'));
+      const querySnapshot = await getDocs(collection(db, 'checklist'));
       const tareasList = querySnapshot.docs.map(doc => ({
-        id: doc.id,  // Aquí estás obteniendo el id de Firestore
+        id: doc.id,
         Descripcion: doc.data().Descripcion,
         Estado: doc.data().Estado
       }));
-      setTarea(tareasList); // Guarda las tareas en el estado
+      setTarea(tareasList);
+      console.log('Toma');
+      Toast.show({
+        type: 'success',
+        text1: 'Tareas Cargadas!',
+        position: 'top',
+        visibilityTime: 3000,
+    });
+      
     } catch (error) {
       console.error('Error al obtener tareas: ', error);
     }
-  };
-  
-  
+  }; 
 
-  // useEffect para ejecutar al cargar la app
-  useEffect(() => {
-    getTareas();  // Obtiene las tareas al iniciar la app
-  }, []);
+  useEffect( () => {
+ 
+      getTareas();  // Llama a getTareas cada vez que la pantalla está activa
+    }, [])
+
 
   return (
     <ImageBackground source={image} style={styles.container}>
       <View style={styles.flechita}>
-      <TouchableOpacity onPress={() => navigation.navigate('inicia')}><Image source={require("../img/atras.png")} style = {styles.flecha}></Image></TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('inicia')}>
+          <Image source={require("../img/atras.png")} style={styles.flecha} />
+        </TouchableOpacity>
       </View>
-    <View style={styles.cajaBlanca}>
-      <Text style={styles.titulo}>Checklist</Text>
-      <View style={styles.form}>
-        <TextInput
-          style={styles.input}
-          value={nuevaTarea}
-          onChangeText={setnuevaTarea}
-          placeholder="Escribe una nueva tarea"
+      <View style={styles.cajaBlanca}>
+        <Text style={styles.titulo}>Checklist</Text>
+        <View style={styles.form}>
+          <TextInput
+            style={styles.input}
+            value={nuevaTarea}
+            onChangeText={setnuevaTarea}
+            placeholder="Escribe una nueva tarea"
+          />
+          <Button title="Añadir" onPress={handleSubmit} />
+        </View>
+        <FlatList
+          data={tareas}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View style={styles.tareaContainer}>
+              <TouchableOpacity onPress={() => marcarTarea(item.id, item.Estado)}>
+                <Text
+                  style={[
+                    styles.tarea,
+                    item.Estado && styles.completedTarea
+                  ]}
+                >
+                  {item.Descripcion}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => borrarTarea(item.id)} style={styles.borrarBoton}>
+                <Text style={styles.borrarTexto}>Eliminar</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         />
-        <Button title="Añadir" onPress={handleSubmit} />
       </View>
-      <FlatList
-  data={tareas}
-  keyExtractor={(item) => item.id}
-  renderItem={({ item }) => (
-    <View style={styles.tareaContainer}>
-      <TouchableOpacity onPress={() => marcarTarea(item.id, item.Estado)}>
-        <Text
-          style={[
-            styles.tarea,
-            item.Estado && styles.completedtarea
-          ]}
-        >
-          {item.Descripcion}
-        </Text>
-      </TouchableOpacity>
-      <Button title="Eliminar" style={styles.borrar} onPress={() => borrarTarea(item.id)} />
-    </View>
-  )}
-/>
-    </View>
+      <Toast ref={(ref) => Toast.setRef(ref)} />
     </ImageBackground>
   );
 }
@@ -122,7 +138,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     justifyContent: 'center',
-   alignItems: 'center'
+    alignItems: 'center',
   },
   tareaContainer: {
     flexDirection: 'row',
@@ -130,14 +146,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
   },
-  cajaBlanca:{
+  cajaBlanca: {
     width: '100%',
-  
     borderRadius: 12,
     backgroundColor: "#fff",
     opacity: 0.75,
     padding: 20,
-  
   },
   titulo: {
     fontSize: 24,
@@ -156,8 +170,14 @@ const styles = StyleSheet.create({
     padding: 10,
     marginRight: 10,
   },
-  borrar: {
-   Color: 'red'
+  borrarBoton: {
+    borderColor: '#ccc',
+    borderWidth: 2,
+    padding: 5,
+    borderRadius: 5,
+  },
+  borrarTexto: {
+    color: 'white',
   },
   tarea: {
     fontSize: 18,
@@ -166,9 +186,9 @@ const styles = StyleSheet.create({
   completedTarea: {
     textDecorationLine: 'line-through',
     color: 'grey',
-  },  
+  },
   flecha: {
-    width: 30,  
+    width: 30,
     height: 30,
   },
   flechita: {
