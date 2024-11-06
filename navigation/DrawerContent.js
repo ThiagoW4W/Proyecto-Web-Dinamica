@@ -90,21 +90,10 @@ import {useState} from "react";
         <View style={Styles.desplegable}>
             
             <TouchableOpacity onPress={()=>navigation.navigate('mercaderias')}><Text style={Styles.buttonDesp} >Mercaderia</Text></TouchableOpacity>
-            <TouchableOpacity style={Styles.img} onPress={() => setIsMercaderiaOpen(!isMercaderiaOpen)}><Image style={Styles.imagen} source={require("../img/flecha-hacia-abajo.png")}  /></TouchableOpacity>
             
         </View>
 
-        {isMercaderiaOpen && (
-                    <View style={Styles.submenu}>
-                    <TouchableOpacity style={Styles.Size} onPress={() => navigation.navigate('mercaderias')}>
-                        <Text style={Styles.dropdown}>Lista productos</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={Styles.Size} onPress={() => navigation.navigate('stocks')}>
-                        <Text style={Styles.dropdown}>Stock</Text>
-                    </TouchableOpacity>
-                    </View>
-                
-            )}
+
         <TouchableOpacity style={Styles.Size}>
             <Text style={Styles.button2} onPress={()=>navigation.navigate('perfil')}>Perfil</Text>
         </TouchableOpacity>
@@ -128,7 +117,7 @@ import {useState} from "react";
                                 style={[Styles.cajita, selectedMethod === 'Telefono' ? {backgroundColor: '#abb2b9'  } : {}]}
                                 onPress={() => handleSelectMethod('Telefono')}
                             >
-                                <Text>Telefono</Text>
+                                <Text>Telefono</Text> Mercaderia
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -177,18 +166,17 @@ import {useState} from "react";
    }
    const Styles = StyleSheet.create({
     container:{
-        width:250,
-        height:'300%',
-        
-
-        
+        width: '100%',
+        height:'300%', 
     },
     box:{
         display:'flex',
+        
         flexDirection:'row',
         justifyContent:'space-between'
     },
     button:{
+        
         color:'#fff',
         padding:15,
      
@@ -199,6 +187,7 @@ import {useState} from "react";
        
     },
     inside:{
+      
         color:'#fff',
         width:'100%',
       
@@ -206,6 +195,7 @@ import {useState} from "react";
         
     },
     dropdown:{
+        
         color:'white',
        
         textAlign:'right',
@@ -213,6 +203,7 @@ import {useState} from "react";
         marginTop:'2%'
     },
     icons:{
+
       display:'flex',
      
     },
@@ -302,10 +293,12 @@ import {useState} from "react";
         
     },
     submenu:{
+        
         backgroundColor:'#212121',
     },
     desplegable:{
         display:'flex',
+        
         flexDirection:'row',
         width:'100%',
         color:'#fff',
@@ -314,7 +307,8 @@ import {useState} from "react";
         width:'100%',
         display:'flex',
         alignItems:'center',
-        justifyContent:'center'
+        justifyContent:'center',
+        
        
     },
     buttonDesp:{
