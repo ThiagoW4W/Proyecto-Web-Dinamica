@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View,StyleSheet, Text, ImageBackground,TextInput,Image, TouchableOpacity} from 'react-native';
 import { db } from '../firebase/config';
-import { collection, addDoc, doc, deleteDoc} from 'firebase/firestore';
-
+import { collection, addDoc, getDocs, query,} from 'firebase/firestore';
+import Toast from 'react-native-toast-message';
 const img = require ("../fondo.jpg")
-
+const MAX_DOCS = 8;
 function Emergenteropero({navigation}) {
     const [nombre, setNombre] = useState('');
     const [dni, setDni] = useState('');
@@ -13,8 +13,12 @@ function Emergenteropero({navigation}) {
     const [estadoRopero, setEstadoRopero] = useState('LIBRE');
 
     const addRopero = async () => {
+
         try {
-            await addDoc(collection(db, 'roperos'), {
+            const querySnapshot = await getDocs(collection(db, 'roperos'));
+            const contadorRopero = querySnapshot.size;
+            if (contadorRopero < MAX_DOCS) {
+              await addDoc(collection(db, 'roperos'), {
                 nombre,
                 dni,
                 apellido,
@@ -22,6 +26,25 @@ function Emergenteropero({navigation}) {
                 estadoRopero
             });
             console.log('Ropero agregado');
+          
+            Toast.show({
+              type: 'success',
+              text1: 'Datos cargado!',
+              position: 'top',
+              visibilityTime: 3000,
+          });
+            }
+            else{
+              console.log('Sin espacio');
+              Toast.show({
+                type: 'error',
+                text1: 'No tienes más espacio en los roperos',
+                position: 'top',
+                visibilityTime: 3000,
+            });
+            }
+
+            
             // Limpiar los campos después de agregar
             setNombre('');
             setDni('');
@@ -37,15 +60,19 @@ function Emergenteropero({navigation}) {
 
     return (
         <ImageBackground source={img}style = {styles.container}>
-           <TouchableOpacity onPress={() => navigation.native('')} style={styles.backButton}>
-              <Text style={styles.backButtonText}>←</Text>
-          </TouchableOpacity>
+           
+
+          
           <Text style = {styles.texto}>Ropero</Text>
             <View style={styles.caja}>
+              
             <View style={styles.label}>
-            <Text style={styles.label}>DATOS DEL ROPERO</Text>
+              <TouchableOpacity style={styles.icon} onPress={() => navigation.navigate('ropero')}>
+                <Image  source={require('../img/atras.png')}></Image>
+              </TouchableOpacity>
+              <Text style={styles.subtitulo}>DATOS DEL ROPERO</Text> 
             </View>
-            <View style={styles.divider} />
+        
             <View style={styles.roperoContainer}>
                   <Text style={styles.roperoNumero}>{numeroRopero}</Text>
                   <Text style={styles.roperoEstado}>{estadoRopero}</Text>
@@ -73,12 +100,13 @@ function Emergenteropero({navigation}) {
                 <Text style={styles.buttonText}  >Agregar</Text>
               </TouchableOpacity>
             </View>
+            <Toast ref={(ref) => Toast.setRef(ref)} />
         </ImageBackground>
         
     );
 }
 export default Emergenteropero;
-const styles = StyleSheet.create({ //estilos
+const styles = StyleSheet.create({ 
     container: {
       flex: 1,
       alignItems: 'center',
@@ -87,10 +115,10 @@ const styles = StyleSheet.create({ //estilos
       height: '100%',
     },
     divider: {
-      width: '115%', // o el ancho que desees
-      height: 1,     // altura de 1 píxel para que sea una línea delgada
-      backgroundColor: '#000', // color de la línea (puedes personalizarlo)
-      marginTop:-40, // espacio alrededor de la línea (opcional)
+      width: '115%', 
+      height: 1,     
+      backgroundColor: '#000', 
+      marginTop:-40, 
       marginBottom: 45,
     },
     backButton: {
@@ -121,17 +149,29 @@ const styles = StyleSheet.create({ //estilos
         opacity: 0.65,
         padding: 20,
     },
+    subtitulo: {
+      flex: 1,
+      fontSize: 20,
+      textAlign: 'center',  
+    },
+    icon:{
+      marginLeft: 10
+    },
     label: {
-      textAlign: 'center',
-      fontSize: 18,
-      fontWeight: 'bold',
-      color: '#333',
-      marginTop: -5,
-      marginBottom: 20,
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '120%',
+      paddingBottom: 10,
+      borderBottomWidth: 1,
+      borderBottomColor: 'black',
     },
     roperoContainer: {
       alignItems: 'center',
+     
       marginBottom: 20,
+      marginTop: 20,
       backgroundColor: '#fff',
       height: 120,
       width:120,
