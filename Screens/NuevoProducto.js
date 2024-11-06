@@ -1,6 +1,7 @@
 import { StyleSheet,View,ImageBackground,Text,Image,TouchableOpacity,TextInput } from 'react-native';
 import { useState } from 'react';
 import * as React from 'react';
+import Toast from 'react-native-toast-message';
 import { Button, Checkbox } from 'react-native-paper';
 import { db } from '../firebase/config';
 import { collection, addDoc, getDocs, doc, deleteDoc} from 'firebase/firestore';
@@ -26,6 +27,12 @@ export default function AñadirProd({navigation}) {
             setPrecio('');
             setStock('');
             setCategoria('');
+            Toast.show({
+                type: 'success',
+                text1: 'Datos Subidos!',
+                position: 'top',
+                visibilityTime: 3000,
+            });
         } catch (error) {
             console.error('Error al agregar el producto: ', error);
         }
@@ -111,7 +118,7 @@ export default function AñadirProd({navigation}) {
                 </View>
             </View>
                 
-           
+            <Toast ref={(ref) => Toast.setRef(ref)} />
             </View>
         </ImageBackground>
         
