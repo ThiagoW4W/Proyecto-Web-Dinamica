@@ -1,23 +1,66 @@
 import { Link } from '@react-navigation/native';
-import { StyleSheet,View,Button,ImageBackground,Text,Image } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Checklist from '../Screens/Checklist'
-import { NavigationContainer } from '@react-navigation/native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { StyleSheet,View,ImageBackground,Text,Image,FlatList,} from 'react-native';
+import { db } from '../firebase/config';
+import {  getDocs,collection} from 'firebase/firestore';
 const image= require("../fondo.jpg")
 
 
-
 export default function Inicio() {
-   
+
+
+  const [tareas, setTarea] = useState([]);
+  // Estado para el nuevo ítem del input
+  
+  const getTareas = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, 'checklist'));
+      const tareasList = querySnapshot.docs.map(doc => ({
+        id: doc.id,  // Aquí estás obteniendo el id de Firestore
+        Descripcion: doc.data().Descripcion,
+        Estado: doc.data().Estado
+      }));
+      setTarea(tareasList); // Guarda las tareas en el estado
+    } catch (error) {
+      console.error('Error al obtener tareas: ', error);
+    }
+  };
+  
+  useFocusEffect(
+    useCallback(() => {
+      getTareas();  // Llama a getTareas cada vez que la pantalla está activa
+    }, [])
+  );
+
     return (
       
       <ImageBackground source={image} style={styles.container}>
-        
         <Link style={styles.check} to={{screen:'checklists'}}>
+          
+        <View style={styles.contenedorTareas} >
+        <Text style={styles.textoChecklist}>Checklist</Text>
+          
+          
+          <FlatList
+              data={tareas}
+              keyExtractor={(item) => item.id}
+              style={[styles.flatList ]}
+              renderItem={({ item }) => (
+                <View style={styles.tareaContainer}>
+                 
+                    <Text style={styles.tareaText}>
+                      {item.Descripcion}
+                    </Text>
+                    
+                  
+                </View>
+              )}
+          />
         
-        <Text style={styles.texto}>Checklist</Text>
-       
+        </View>
         </Link>
+
         <Link style={styles.merc} to={{screen:'mercaderias'}}>
         <View style={styles.box}>
         <Image
@@ -81,31 +124,21 @@ export default function Inicio() {
       
     },
     texto:{
-      fontSize:12,
-      position:'relative',
-      
-      
-      
-      
-    
-      
+      fontSize:15,
+
     },
     merc: {
       width:'70%',
       height:'15%',
       backgroundColor:'rgba(255,255,255,0.7);',
-     
       borderRadius:10,
-     
       position:'relative',
-      paddingLeft:'3%',
-    
+      paddingLeft:'3%',    
       display:'flex',
-      flexDirection:'column',
-     
-     
-      
-     
+      flexDirection:'column',                     
+    },
+    contenedorTareas:{
+      padding:20
     },
     icons:{
       width:50,
@@ -137,4 +170,8 @@ export default function Inicio() {
       
      
     },
+    tareaText: {
+      fontWeight: 'bold'
+      
+    }
   });
