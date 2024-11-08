@@ -11,6 +11,7 @@ import {useState} from "react";
     const [visible, setVisible] = React.useState(false);
     const [isModalVisible, SetIsModalVisible] = useState(false);
     const [itsModalVisible, SetModalVisible] = useState(false);
+    const [itsModalVisible2, SetModalVisible2] = useState(false);
     const [selectedMethod, setSelectedMethod] = useState(null);
 
     const handleSelectMethod = (method) => {
@@ -22,8 +23,10 @@ import {useState} from "react";
     const handleEmailPress=()=>{
         Linking.openURL("mailto:antonellanairivera@gmail.com")
     }
+    const handleVideoPress=()=>{
+        Linking.openURL("https://youtu.be/KAHyptnH5dQ?si=KcpvaJokuGrzIIGk")
+    }
     const handleConfirm = () => {
-        
         if (selectedMethod==='Telefono'){
            handleCallPress();
         }else{
@@ -31,8 +34,7 @@ import {useState} from "react";
         }
         SetModalVisible(false);
     };
-  const openMenu = () => setVisible(true);
-  const closeMenu = () => setVisible(false);
+
   const onSignOut =()=>{
     signOut(auth).catch(error=>console.log(error));
 }
@@ -64,7 +66,9 @@ import {useState} from "react";
 
         <View style={Styles.desplegable}  >
             <TouchableOpacity onPress={()=>navigation.navigate('Boleterias')}><Text style={Styles.buttonDesp}>Boleteria</Text></TouchableOpacity>
-            <TouchableOpacity style={Styles.img} onPress={() => setIsBoleteriaOpen(!isBoleteriaOpen)}><Image style={Styles.imagen} source={require("../img/flecha-hacia-abajo.png")}/></TouchableOpacity>
+            <TouchableOpacity style={Styles.img} onPress={() => setIsBoleteriaOpen(!isBoleteriaOpen)}>
+                <Image style={Styles.imagen} source={require("../img/flecha-hacia-abajo.png")}/>
+            </TouchableOpacity>
         </View>
 
         {isBoleteriaOpen && (
@@ -90,7 +94,7 @@ import {useState} from "react";
         <View style={Styles.desplegable}>
             
             <TouchableOpacity onPress={()=>navigation.navigate('mercaderias')}><Text style={Styles.buttonDesp} >Mercaderia</Text></TouchableOpacity>
-            
+
         </View>
 
 
@@ -109,8 +113,7 @@ import {useState} from "react";
                         <View style={Styles.position}>
                             <TouchableOpacity
                                 style={[Styles.cajita,  selectedMethod === 'Correo' ? {backgroundColor: '#abb2b9'  } : {}]}
-                                onPress={() => handleSelectMethod('Correo')}
-                            >
+                                onPress={() => handleSelectMethod('Correo')}>
                                 <Text>Correo</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
@@ -135,8 +138,27 @@ import {useState} from "react";
             </View>
         </Modal>
         <TouchableOpacity style={Styles.Size}>
-            <Text style={Styles.button2} onPress={()=>navigation.navigate('boleterias')}>Ayuda</Text>
+            <Text style={Styles.button2} onPress={()=>SetModalVisible2(true)}>Ayuda</Text>
         </TouchableOpacity>
+        <Modal visible={itsModalVisible2} animationType="slide" transparent={true}>
+            <View style={Styles.modalBox}>
+                <View style={Styles.modal}>
+                    <View style={Styles.TextBox}>
+                        <Text style={Styles.textoCantero}>Perdon Cantero, acá no hay nada todavia. NO TOQUES ESTE BOTÓN</Text>
+                        
+                    </View>
+                    <View style={Styles.iconos}>
+                        <TouchableOpacity onPress={() => SetModalVisible2(false)}>
+                            <Image source={require("../img/circle-x_10489836.png")} />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={handleVideoPress}>
+                                <Image source={require("../img/check.png")} />
+                            </TouchableOpacity>
+                       
+                    </View>
+                </View>
+            </View>
+        </Modal>
         <TouchableOpacity style={Styles.Size} onPress={()=>SetIsModalVisible(true)}>
             <Text style={Styles.button3} >Cerrar Sesión</Text>
         </TouchableOpacity>
@@ -325,6 +347,9 @@ import {useState} from "react";
         height:'100%',
         left:'300%'
     },
+    textoCantero:{
+       textAlign:'center'
+    }
 
   
   
