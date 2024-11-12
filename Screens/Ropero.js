@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Modal } from 'react-native';
 import { db } from '../firebase/config';
 import Toast from 'react-native-toast-message';
 import { collection, getDocs, doc, deleteDoc } from 'firebase/firestore';
@@ -10,7 +11,8 @@ function Ropero({ navigation }) {
     // Estados iniciales para los casilleros
     const [lockers, setlockers] = useState([]);
     const [refreshing, setRefreshing] = useState(false); // Estado para la actualización
-
+    const [isModalVisible, setIsModalVisible] = useState(false); 
+    const [lockerToDelete, setLockerToDelete] = useState(null); 
     const TraerDatos = async () => {
       try {
           const querySnapshot = await getDocs(collection(db, 'roperos'));
@@ -26,7 +28,7 @@ function Ropero({ navigation }) {
             position: 'top',
             visibilityTime: 3000,
         });
-          setlockers(dataList); // Guarda los datos en el estado
+          setlockers(dataList); 
           console.log('Mostrando datos de la base de datos');
       } catch (error) {
           console.error('Error al obtener datos: ', error);
@@ -52,10 +54,14 @@ function Ropero({ navigation }) {
   };
 
   const onRefresh = async () => {
-    setRefreshing(true); // Comienza la actualización
-    await TraerDatos();  // Vuelve a cargar los datos
-    setRefreshing(false); // Finaliza la actualización
+    setRefreshing(true); 
+    await TraerDatos();  
+    setRefreshing(false); 
   };
+  const handleDeleteClick = (locker) => {
+    setLockerToDelete(locker); // Establece el casillero que se va a eliminar
+    setIsModalVisible(true); 
+};
 
   useEffect(() => {
     TraerDatos();
@@ -80,7 +86,7 @@ function Ropero({ navigation }) {
             >
               {lockers.length > 0 ? (
                 lockers.map((locker) => (
-                  <TouchableOpacity style={styles.lockers} key={locker.id} onPress={() => borrarlockers(locker.id)}>
+                  <TouchableOpacity style={styles.lockers} key={locker.id} onPress={() => handleDeleteClick(locker)}>
                     <View>
                       <Text>{locker.nombre ?? 'Sin nombre'}</Text>
                     </View>
@@ -96,17 +102,38 @@ function Ropero({ navigation }) {
                 <Text style={styles.loadingText}>No hay lockers disponibles</Text>
               )}
             </ScrollView>
-            <View style={styles.botones}>
-              <TouchableOpacity style={styles.containerButton}>
-                <Text style={styles.buttonText}>Ver más</Text>
-              </TouchableOpacity>             
-              <TouchableOpacity onPress={() => navigation.navigate('NuevoRopero')}>
+            <View style={styles.botones}>            
+              <TouchableOpacity  onPress={() => navigation.navigate('NuevoRopero')}>
                 <Text style={styles.mas}> + </Text>
               </TouchableOpacity>
             </View>
             
           </View>
-          
+          <Modal
+                animationType="slide"
+                transparent={true}
+                visible={isModalVisible}
+                onRequestClose={() => setIsModalVisible(false)} 
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalText}>¿Desea eliminar el casillero?</Text>
+                        <View style={styles.modalButtons}>
+                            <TouchableOpacity onPress={() => {
+                                    if (lockerToDelete) {
+                                        borrarlockers(lockerToDelete.id);
+                                        setIsModalVisible(false)
+                                    }
+                                }} style={styles.modalButton}>
+                                <Text style={styles.modalButtonText}>Sí</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => setIsModalVisible(false)} style={styles.modalButton}>
+                                <Text style={styles.modalButtonText}>No</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
           <Toast ref={(ref) => Toast.setRef(ref)} />
             
         </ImageBackground>
@@ -169,15 +196,12 @@ const styles = StyleSheet.create({
       display: 'flex',
       position: 'absolute',
       flexDirection: 'row',
-      width: '100%',
-      justifyContent:'center',
+      width: '90%',
+      justifyContent:'space-evenly',
       alignItems: 'center',
-      gap: 20,
-      top: 540,
-      right: 20,
+      top: '90%',
     },
     containerButton: {
-      backgroundColor: 'transparent',  
       borderRadius: 12, 
       borderColor: 'white',
       borderWidth: 2,
@@ -192,7 +216,6 @@ const styles = StyleSheet.create({
     },
     mas: {
       textAlign: 'center',
-      backgroundColor: 'transparent',  
       borderRadius: 12, 
       borderColor: 'white',
       borderWidth: 2,
@@ -204,5 +227,38 @@ const styles = StyleSheet.create({
       fontSize: 18,
       color: '#666',
       marginTop: 20,
-    }
+    },
+    modalOverlay: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+      backgroundColor: 'white',
+      padding: 20,
+      borderRadius: 10,
+      width: '80%',
+      alignItems: 'center',
+  },
+  modalText: {
+      fontSize: 18,
+      marginBottom: 20,
+  },
+  modalButtons: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      width: '100%',
+  },
+  modalButton: {
+      backgroundColor: 'gray',
+      padding: 10,
+      borderRadius: 10,
+      width: '40%',
+      alignItems: 'center',
+  },
+  modalButtonText: {
+      color: 'white',
+      fontSize: 16,
+  },
 });

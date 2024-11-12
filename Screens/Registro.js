@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { View,StyleSheet, Text, Button, ImageBackground,TextInput,Image, TouchableOpacity, Alert} from 'react-native';
 import { db } from '../firebase/config';
-import { collection, addDoc,} from 'firebase/firestore';
+import { collection, setDoc,doc} from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase/config';
 const img = require ("../fondo.jpg")
@@ -11,22 +11,29 @@ function HomeScreen({ navigation }) {
   
   const [email,setEmail]=useState('');
   const [password,setPassword]=useState('');
+  const [nombre,setNombre]=useState('');
+  const [Dni,setDni]=useState('');
   const onHandleSignup=()=>{
     
     if (email !== '' && password !== ''){
       createUserWithEmailAndPassword(auth,email,password)
-      .then(()=> {
+      .then( async(userCredential)=> {
         console.log('Registro Exitoso :P')
+        const user = userCredential.user;
         const addUser = async () => {
           try {
-            await addDoc(collection(db, 'Users'), {
+            await setDoc(doc(db, 'Users',  user.uid), {
               email,
-              password
+              password,
+              Dni,
+              nombre,
             });
             console.log('Datos cargados a la Base de datos');
             // Limpiar los campos después de agregar
             setEmail('');
             setPassword('');
+            setDni('');
+            setNombre('');
           } catch (error) {
             console.error('Error cargar Usuario a la BD: ', error);
           }
@@ -77,7 +84,8 @@ function HomeScreen({ navigation }) {
     <View style = {styles.cajainput}>
       <Text  style={styles.titulo}>Nombre</Text>
       <TextInput placeholder='Nombre' style = {styles.input}
-          
+        value={nombre}
+        onChangeText={(text) =>setNombre(text)}
           />
           <Text style={styles.titulo}>Email</Text>
           <TextInput style = {styles.input}
@@ -87,6 +95,7 @@ function HomeScreen({ navigation }) {
             textContentType='email-address'
             autoFocus={true}
             value={email}
+            maxLength={12}
             onChangeText={(text) =>setEmail(text)}
           />
           <Text style={styles.titulo}>Contraseña</Text>
@@ -97,13 +106,16 @@ function HomeScreen({ navigation }) {
           secureTextEntry={true}
           textContentType='password'
           value={password}
+          maxLength={12}
           onChangeText={(text) =>setPassword(text)}
           />
           <Text style={styles.titulo}>DNI</Text>
-          <TextInput style = {styles.input}
-            placeholder="DNI"
-            maxLength={8}
-            selectionColor="fff"
+          <TextInput style = {styles.input }  
+          value={Dni}
+          onChangeText={(text) =>setDni(text)}
+          placeholder="DNI"
+          maxLength={8}
+          selectionColor="fff"
           />
     <View style={styles.logos}>
       <TouchableOpacity><Image source={require('../img/facebook.png')} style={styles.imagen}></Image></TouchableOpacity>

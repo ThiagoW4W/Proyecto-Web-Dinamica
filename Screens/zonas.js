@@ -1,9 +1,11 @@
 import React from 'react';
+import { useState } from 'react';
 import { ImageBackground, StyleSheet, Text, View, Image,TouchableOpacity } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 
 export default function Zonas({navigation}){
+  const[image,setImage] = useState('')
   return (
     <ImageBackground source={require('../fondo.jpg')} style={styles.fondo}>
       <View style={styles.container}>

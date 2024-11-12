@@ -57,10 +57,16 @@ export default function Mercaderia({ navigation }) {
                             <TouchableOpacity onPress={() => navigation.navigate('inicia')}>
                                 <Image source={require("../img/left.png")} style={styles.imagen} />
                             </TouchableOpacity>
+                            <Text>Nombre</Text>
+                            <Text>Precio</Text>
+                            <Text>Stock</Text>
 
                         </View>
                         <ScrollView>
                             <View style={styles.ProductosContainer}>
+                            <View style={styles.Productos} > 
+                                
+                            </View>
                                 {Productos.length > 0 ? (
                                     Productos.map((productos) => (
                                         <View style={styles.Productos} key={productos.id}>
@@ -85,7 +91,7 @@ export default function Mercaderia({ navigation }) {
 
                         <View style={styles.position}>
                             <View style={styles.buttons}>
-                                <TouchableOpacity onPress={() => navigation.navigate('checklists')}>
+                                <TouchableOpacity>
                                     <Image source={require("../img/option.png")} style={styles.imagen} />
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={() => navigation.navigate('new')}>
@@ -199,4 +205,5 @@ const styles = StyleSheet.create({
         borderBottomColor: 'white',
         borderBottomWidth: 2,
     },
+    
 });

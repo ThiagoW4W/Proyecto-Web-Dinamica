@@ -1,9 +1,10 @@
  import { DrawerContentScrollView } from "@react-navigation/drawer"
 import React from "react";
-import {useState} from "react";
+import {useState,useEffect} from "react";
  import { TouchableOpacity,StyleSheet,Text,Image,View,Modal,Linking } from "react-native"
  import { signOut } from "firebase/auth";
- import { auth } from "../firebase/config";
+ import { auth,db } from "../firebase/config";
+ import { getDoc, doc,setDoc } from 'firebase/firestore';
  
  export const MenuItems=({navigation})=>{
     const [isBoleteriaOpen, setIsBoleteriaOpen] = useState(false);
@@ -13,6 +14,7 @@ import {useState} from "react";
     const [itsModalVisible, SetModalVisible] = useState(false);
     const [itsModalVisible2, SetModalVisible2] = useState(false);
     const [selectedMethod, setSelectedMethod] = useState(null);
+    const [userData, setUserData] = useState(null);
 
     const handleSelectMethod = (method) => {
         setSelectedMethod(method);
@@ -34,6 +36,28 @@ import {useState} from "react";
         }
         SetModalVisible(false);
     };
+    const takeUser = async () => {
+        try {
+          const user = auth.currentUser;  
+          if (user) {
+            const userRef = doc(db, 'Users', user.uid);  
+            const docSnap = await getDoc(userRef);  
+            if (docSnap.exists()) {
+              setUserData(docSnap.data());  
+            } else {
+              console.log("No existe el documento");
+            }
+          } else {
+            console.log("No hay usuario logeado");
+          }
+        } catch (error) {
+          console.error('Error cargar Usuario a la Bd: ', error);
+        }
+      };
+    
+      useEffect(() => {
+        takeUser();  
+      }, []);
 
   const onSignOut =()=>{
     signOut(auth).catch(error=>console.log(error));
@@ -42,18 +66,15 @@ import {useState} from "react";
       <DrawerContentScrollView style={Styles.container}  >
         <View style={Styles.box}>
         <TouchableOpacity onPress={()=>navigation.closeDrawer()} >
-        <Image  
-          style={Styles.icons}
-          source={require("../img/cross-small.png")}
-          
-        />
+            <Image  
+            style={Styles.icons}
+            source={require("../img/cross-small.png")}
+            
+            />
         </TouchableOpacity>
-
-        <Image
-          style={Styles.icons}
-          source={require("../img/gear.png")}
-          
-        />
+        <TouchableOpacity style={Styles.box2}>
+       <Text style={Styles.color}>Hey! {userData?.nombre}</Text>
+       </TouchableOpacity>
         </View>
          
         <TouchableOpacity style={Styles.Size} activeOpacity={0.7}>
@@ -120,7 +141,7 @@ import {useState} from "react";
                                 style={[Styles.cajita, selectedMethod === 'Telefono' ? {backgroundColor: '#abb2b9'  } : {}]}
                                 onPress={() => handleSelectMethod('Telefono')}
                             >
-                                <Text>Telefono</Text> Mercaderia
+                                <Text>Telefono</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -195,7 +216,8 @@ import {useState} from "react";
         display:'flex',
         
         flexDirection:'row',
-        justifyContent:'space-between'
+        justifyContent:'space-between',
+        alignItems:'center'
     },
     button:{
         
@@ -237,7 +259,7 @@ import {useState} from "react";
         padding:10,
      
         marginTop:'2%',
-        width:'80%',
+        width:'100%',
         display:'flex',
         textAlign:'center'
     },
@@ -246,7 +268,7 @@ import {useState} from "react";
         padding:10,
      
         marginTop:'2%',
-        width:'80%',
+        width:'100%',
         display:'flex',
         textAlign:'center'
     },
@@ -349,6 +371,10 @@ import {useState} from "react";
     },
     textoCantero:{
        textAlign:'center'
+    },
+    color:{
+        color:'#fff',
+        
     }
 
   

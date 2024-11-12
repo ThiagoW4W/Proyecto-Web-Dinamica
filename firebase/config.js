@@ -28,9 +28,9 @@ try {
   });
 } catch (error) {
   if (error.code !== 'auth/already-initialized') {
-    throw error; // Rethrow if it's a different error
+    throw error; 
   }
-  // Auth is already initialized, you can retrieve the existing instance
+
   auth = getAuth(app);
 }
 

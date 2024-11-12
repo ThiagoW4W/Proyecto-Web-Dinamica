@@ -1,18 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View,StyleSheet, Text, ImageBackground,TextInput, TouchableOpacity,Image,Modal} from 'react-native';
-
-
+import { getDoc, doc,setDoc } from 'firebase/firestore';
+import { db,auth } from '../firebase/config';
 const img = require ("../fondo.jpg")
 
 function Perfil({ navigation }) {
   const [isModalVisible, SetIsModalVisible] = useState(false);
   const [editable, setEditable] = useState(false); 
   const [isEditing,SetIsEditing]= useState(false)
+  const [userData, setUserData] = useState(null);
   function editar(){
     setEditable(true);
       SetIsModalVisible(false);
       SetIsEditing(true);
   }
+  const takeUser = async () => {
+    try {
+      const user = auth.currentUser;  
+      if (user) {
+        const userRef = doc(db, 'Users', user.uid);  
+        const docSnap = await getDoc(userRef);  
+        if (docSnap.exists()) {
+          setUserData(docSnap.data());  
+        } else {
+          console.log("No existe el documento");
+        }
+      } else {
+        console.log("No hay usuario logeado");
+      }
+    } catch (error) {
+      console.error('Error cargar Usuario a la Bd: ', error);
+    }
+  };
+
+  useEffect(() => {
+    takeUser();  
+  }, []);
+  const updateUser =async()=>{
+    const user = auth.currentUser;  
+    if (user) {
+    const userRef = doc(db, 'Users', user.uid);  
+    await setDoc(userRef, {
+      password: 'b432c68e',
+      nombre:userData?.nombre || '' ,
+      email:userData?.email || '',
+      dni:userData?.Dni || ''
+    }, { merge: true });
+
+    }
+  }
+  
+ 
     return (
         <ImageBackground source={img}style = {styles.container}>
           <Text style={styles.titulo}>Perfil</Text>
@@ -46,19 +84,18 @@ function Perfil({ navigation }) {
               <View style={styles.imageBox}>
                 <View style={styles.whiteBox}>
                      <View style={styles.foto}><Text style={styles.texto2}>Foto</Text></View>
-                     <View style={styles.dni}><Text style={styles.texto2}>Dni</Text></View>
+                     <View style={styles.dni}><Text style={styles.texto2} >{userData?.Dni}</Text></View>
                 </View>
                 
               </View>
               <View style={styles.inputs}>
-                <TextInput  editable={editable} style={styles.input}>Nombre</TextInput>
-                <TextInput  editable={editable} style={styles.input}>Apellido</TextInput>
-                <TextInput  editable={editable} style={styles.input}>Dni</TextInput>
-                <TextInput editable={editable} style={styles.input}>Email</TextInput>
-                <TextInput editable={editable} style={styles.input}>Contraseña</TextInput>
+                <TextInput  editable={editable} style={styles.input}  value={userData?.nombre || ''} placeholder='Nombre' onChangeText={(text) =>setNombre(text)}></TextInput>
+                <TextInput  editable={editable} style={styles.input} placeholder='Dni'  value={userData?.Dni || ''} onChangeText={(text) =>setDni(text)}></TextInput>
+                <TextInput editable={editable} style={styles.input} placeholder='Email'  value={userData?.email || ''} onChangeText={(text) =>setEmail(text)}></TextInput>
+                <TextInput editable={editable} style={styles.input} placeholder='Contraseña' value={userData?.password || ''} onChangeText={(text) =>setPassword(text)}></TextInput>
               </View>
               <View style={styles.buttonBox}>
-                <TouchableOpacity style={styles.button}><Text style={styles.texto}>Guardar</Text></TouchableOpacity>
+                <TouchableOpacity style={styles.button}  onPress={updateUser}><Text style={styles.texto}>Guardar</Text></TouchableOpacity>
               </View>
            </View>
         </ImageBackground>
@@ -134,7 +171,8 @@ const styles = StyleSheet.create({ //estilos
     dni:{
       width:'100%',
       height:'35%',
-      left:'5%'
+      justifyContent:'center',
+      alignItems:'center'
 
     },
     texto2:{

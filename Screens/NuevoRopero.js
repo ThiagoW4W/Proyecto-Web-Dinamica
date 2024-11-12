@@ -26,6 +26,7 @@ function Emergenteropero({navigation}) {
                 estadoRopero
             });
             console.log('Ropero agregado');
+            navigation.navigate('ropero')
           
             Toast.show({
               type: 'success',
@@ -82,22 +83,25 @@ function Emergenteropero({navigation}) {
                     placeholder="DNI"
                     value={dni}
                     onChangeText={setDni}
+                    maxLength={8}
                 />
                 <TextInput
                     style={styles.input}
                     placeholder="Nombre"
                     value={nombre}
                     onChangeText={setNombre}
+                    maxLength={12}
                 />
                 <TextInput
                     style={styles.input}
                     placeholder="Apellido"
                     value={apellido}
                     onChangeText={setApellido}
+                    maxLength={12}
                 />
 
               <TouchableOpacity onPress={addRopero} style={styles.containerButton} >
-                <Text style={styles.buttonText}  >Agregar</Text>
+                <Text style={styles.buttonText} >Agregar</Text>
               </TouchableOpacity>
             </View>
             <Toast ref={(ref) => Toast.setRef(ref)} />
@@ -212,5 +216,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 65,
   },
+  
   
 });

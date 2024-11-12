@@ -4,7 +4,7 @@ import * as React from 'react';
 import Toast from 'react-native-toast-message';
 import { Button, Checkbox } from 'react-native-paper';
 import { db } from '../firebase/config';
-import { collection, addDoc, getDocs, doc, deleteDoc} from 'firebase/firestore';
+import { collection, addDoc, getDocs, doc, deleteDoc, onSnapshot} from 'firebase/firestore';
 const image= require("./../fondo.jpg")
 
 export default function AñadirProd({navigation}) {
@@ -22,6 +22,7 @@ export default function AñadirProd({navigation}) {
                 categoria,
             });
             console.log('Producto agregado');
+            navigation.navigate('mercaderias')
             // Limpiar los campos después de agregar
             setNombre('');
             setPrecio('');
