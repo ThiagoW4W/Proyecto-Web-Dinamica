@@ -20,6 +20,7 @@ import NuevaReserva from '../Screens/NuevaReserva';
 import NuevoRopero from '../Screens/NuevoRopero';
 import Perfil from '../Screens/perfil';
 import NuevoIncidente from '../Screens/NuevoIncidente'
+import Ayuda from '../Screens/ayuda';
 const drawer = createDrawerNavigator();
 export default function Drawer() {
   return (
@@ -234,6 +235,14 @@ export default function Drawer() {
          }}
          //Componente: Asignacion con la pantalla
          component={NuevoIncidente} />
+         <drawer.Screen name="ayuda" 
+         //Creacion Opcion Checklist
+         options={{
+           drawerLabel:"ayuda",
+           title:"",
+         }}
+         //Componente: Asignacion con la pantalla
+         component={Ayuda} />
 
 
 

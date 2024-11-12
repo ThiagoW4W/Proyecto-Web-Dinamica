@@ -120,7 +120,7 @@ import {useState,useEffect} from "react";
 
 
         <TouchableOpacity style={Styles.Size}>
-            <Text style={Styles.button2} onPress={()=>navigation.navigate('perfil')}>Perfil</Text>
+            <Text style={Styles.button2} >Perfil</Text>
         </TouchableOpacity>
         
         <TouchableOpacity style={Styles.Size}>
@@ -158,28 +158,10 @@ import {useState,useEffect} from "react";
                 </View>
             </View>
         </Modal>
-        <TouchableOpacity style={Styles.Size}>
-            <Text style={Styles.button2} onPress={()=>SetModalVisible2(true)}>Ayuda</Text>
+        <TouchableOpacity style={Styles.Size} onPress={()=>navigation.navigate('ayuda')}>
+            <Text style={Styles.button2}>Ayuda</Text>
         </TouchableOpacity>
-        <Modal visible={itsModalVisible2} animationType="slide" transparent={true}>
-            <View style={Styles.modalBox}>
-                <View style={Styles.modal}>
-                    <View style={Styles.TextBox}>
-                        <Text style={Styles.textoCantero}>Perdon Cantero, acá no hay nada todavia. NO TOQUES ESTE BOTÓN</Text>
-                        
-                    </View>
-                    <View style={Styles.iconos}>
-                        <TouchableOpacity onPress={() => SetModalVisible2(false)}>
-                            <Image source={require("../img/circle-x_10489836.png")} />
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={handleVideoPress}>
-                                <Image source={require("../img/check.png")} />
-                            </TouchableOpacity>
-                       
-                    </View>
-                </View>
-            </View>
-        </Modal>
+       
         <TouchableOpacity style={Styles.Size} onPress={()=>SetIsModalVisible(true)}>
             <Text style={Styles.button3} >Cerrar Sesión</Text>
         </TouchableOpacity>
