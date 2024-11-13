@@ -21,6 +21,7 @@ import NuevoRopero from '../Screens/NuevoRopero';
 import Perfil from '../Screens/perfil';
 import NuevoIncidente from '../Screens/NuevoIncidente'
 import Ayuda from '../Screens/ayuda';
+import ActualizarPerfil from '../Screens/ActualizarPerfil'
 const drawer = createDrawerNavigator();
 export default function Drawer() {
   return (
@@ -243,6 +244,15 @@ export default function Drawer() {
          }}
          //Componente: Asignacion con la pantalla
          component={Ayuda} />
+
+        <drawer.Screen name="actuPerfil" 
+         //Creacion Opcion Checklist
+         options={{
+           drawerLabel:"actuPerfil",
+           title:"",
+         }}
+         //Componente: Asignacion con la pantalla
+         component={ActualizarPerfil} />
 
 
 

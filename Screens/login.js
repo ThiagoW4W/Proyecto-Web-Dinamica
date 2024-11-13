@@ -56,6 +56,7 @@ export default function Login({navigation}) {
         style={styles.input}
         placeholder="ingrese su contraseña"
         secureTextEntry={true}
+        autoCapitalize='none'
         value={password}
         textContentType='password'
         onChangeText={(text)=> setPassword(text)}

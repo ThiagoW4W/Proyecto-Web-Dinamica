@@ -1,43 +1,40 @@
 import React, { useState,useEffect } from 'react';
 import { View,StyleSheet, Text, ImageBackground,TextInput, TouchableOpacity,Image,Modal} from 'react-native';
-import { getDoc, doc,setDoc } from 'firebase/firestore';
 import { useFocusEffect } from '@react-navigation/native';
+import { getDoc, doc,setDoc } from 'firebase/firestore';
 import { db,auth } from '../firebase/config';
 const img = require ("../fondo.jpg")
 
-function Perfil({ navigation }) {
-  const [isModalVisible, SetIsModalVisible] = useState(false);
-  const [userData, setUserData] = useState(null);
+function ActualizarPerfil({ navigation }) {
+  const [isModalVisible2, SetIsModalVisible2] = useState(false);
+  const [nombre,setNombre]=useState('')
+  const [dni,setDni]=useState('')
+  const [password,setPassword]=useState('')
   useFocusEffect(
     React.useCallback(() => {
-      SetIsModalVisible(false); 
+      SetIsModalVisible2(false); 
     }, [])
   );
+  const updateUser =async()=>{
+    const user = auth.currentUser;  
+    if (user) {
+        try{
+    const userRef = doc(db, 'Users', user.uid);  
+    await setDoc(userRef, {
+      password: password || '' ,
+      nombre:nombre || '' ,
+      Dni:dni || ''
+    }, { merge: true });
 
-  const takeUser = async () => {
-    try {
-      const user = auth.currentUser;  
-      if (user) {
-        const userRef = doc(db, 'Users', user.uid);  
-        const docSnap = await getDoc(userRef);  
-        if (docSnap.exists()) {
-          setUserData(docSnap.data());  
-        } else {
-          console.log("No existe el documento");
-        }
-      } else {
-        console.log("No hay usuario logeado");
-      }
-    } catch (error) {
-      console.error('Error cargar Usuario a la Bd: ', error);
+    }catch (error){
+        console.error('error al actualizar los datos',error)
     }
-  };
-
-  useEffect(() => {
-    takeUser();  
-  }, []);
-  
-
+    } else{
+        console.log('usuario no autenticado')
+    }
+    navigation.navigate('perfil')
+  }
+ 
     return (
         <ImageBackground source={img}style = {styles.container}>
           <Text style={styles.titulo}>Perfil</Text>
@@ -47,21 +44,21 @@ function Perfil({ navigation }) {
            </View>
            <View style={styles.infoBox}>
               <View style={styles.dev}>
-              <TouchableOpacity onPress={()=>SetIsModalVisible(true)} style={styles.icon}><Image source={require("../img/edit.png")} /></TouchableOpacity>
+              <TouchableOpacity onPress={() => SetIsModalVisible2(true)} style={styles.icon}><Image source={require("../img/circle-x_10489836.png")}/></TouchableOpacity>
               </View>
-              <Modal visible={isModalVisible} animationType="slide"
+              <Modal visible={isModalVisible2} animationType="slide"
         transparent={true}>
             <View style={styles.modalBox}>
                 <View style={styles.modal}>
                     <View style={styles.TextBox}>
                          <Text style={styles.textM}>¿Estás seguro Que deseas </Text>
-                         <Text style={styles.textM}>Editar el perfil?</Text>
+                         <Text style={styles.textM}>Cancelar la edicion?</Text>
                     </View>
                     <View style={styles.iconos}>
-                        <TouchableOpacity onPress={()=>SetIsModalVisible(false)} >
+                        <TouchableOpacity onPress={()=>SetIsModalVisible2(false)} >
                             <Image source={require("../img/circle-x_10489836.png")}></Image>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => navigation.navigate('actuPerfil')} >
+                        <TouchableOpacity  onPress={() => navigation.navigate('perfil')} >
                             <Image source={require("../img/check.png")}></Image>
                         </TouchableOpacity>
                     </View>
@@ -71,23 +68,25 @@ function Perfil({ navigation }) {
               <View style={styles.imageBox}>
                 <View style={styles.whiteBox}>
                      <View style={styles.foto}><Text style={styles.texto2}>Foto</Text></View>
-                     <View style={styles.dni}><Text style={styles.texto2} >{userData?.Dni}</Text></View>
+                     <View style={styles.dni}><Text style={styles.texto2} >Dni</Text></View>
                 </View>
                 
               </View>
               <View style={styles.inputs}>
-                <TextInput  editable={false} style={styles.input}  value={userData?.nombre || ''} placeholder='Nombre' onChangeText={(text) =>setNombre(text)}></TextInput>
-                <TextInput  editable={false} style={styles.input} placeholder='Dni'  value={userData?.Dni || ''} onChangeText={(text) =>setDni(text)}></TextInput>
-                <TextInput editable={false} style={styles.input} placeholder='Email'  value={userData?.email || ''} onChangeText={(text) =>setEmail(text)}></TextInput>
-                <TextInput editable={false} style={styles.input} placeholder='Contraseña' value={userData?.password || ''} onChangeText={(text) =>setPassword(text)}></TextInput>
+                <TextInput editable={false} style={styles.input} placeholder='Email (No editable)' ></TextInput>
+                <TextInput  editable={true} style={styles.input}  value={nombre} placeholder='Nombre' onChangeText={(text) =>setNombre(text)}></TextInput>
+                <TextInput  editable={true} style={styles.input} placeholder='Dni'  value={dni} onChangeText={(text) =>setDni(text)}></TextInput>
+                <TextInput editable={true} style={styles.input} placeholder='Contraseña' autoCapitalize='none' value={password} onChangeText={(text) =>setPassword(text)}></TextInput>
               </View>
-          
+              <View style={styles.buttonBox}>
+                <TouchableOpacity style={styles.button}><Text style={styles.texto} onPress={updateUser}>Guardar</Text></TouchableOpacity>
+              </View>
            </View>
         </ImageBackground>
         
     );
 }
-export default Perfil;
+export default ActualizarPerfil;
 const styles = StyleSheet.create({ //estilos
     container: {
       flex: 1,
@@ -118,7 +117,7 @@ const styles = StyleSheet.create({ //estilos
     },
     infoBox:{
       width:'80%',
-      height:'70%',
+      height:470,
       backgroundColor:'rgba(255,255,255,0.7);',
       top:'0.5%',
       borderBottomLeftRadius:10,
@@ -171,7 +170,6 @@ const styles = StyleSheet.create({ //estilos
     buttonBox:{
       width:'100%',
       height:'15%',
-      backgroundColor:'lightgray',
       alignItems:'center',
       justifyContent:'center',
     },

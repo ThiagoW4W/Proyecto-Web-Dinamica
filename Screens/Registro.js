@@ -95,7 +95,7 @@ function HomeScreen({ navigation }) {
             textContentType='email-address'
             autoFocus={true}
             value={email}
-            maxLength={12}
+
             onChangeText={(text) =>setEmail(text)}
           />
           <Text style={styles.titulo}>Contraseña</Text>
