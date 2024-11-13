@@ -1,9 +1,89 @@
 import { StyleSheet,View,ImageBackground,Text,TouchableOpacity,Image,TextInput,ScrollView } from 'react-native';
+import { db } from '../firebase/config';
+import { addDoc, collection,getDocs} from 'firebase/firestore';
+import Toast from 'react-native-toast-message';
+import { useEffect, useState } from 'react';
 const img = require ("../fondo.jpg")
+const MAX_DOCS = 100;
+
 export default function NuevaReserva ({navigation}) {
+    const [nombre, setNombre] = useState('');
+    const [apellido, setApellido] = useState('');
+    const [DNI, setDNI] = useState('');
+    const [cantidadPers, setCantidadPers] = useState('0');
+    const [GLOBAL,setGlobal] = useState('')
+
+
+const verCantidadReservas = async () =>{
+    const querySnapshot = await getDocs(collection(db, 'Reservas'));
+    const contadorReserva = querySnapshot.size;
+    setGlobal(Number(contadorReserva) + Number(cantidadPers)) 
+}
+useEffect (() => {
+    verCantidadReservas()
+    console.log("hola tengo",GLOBAL)
+}, []);
+
+    
+    const addProducto = async () => {
+        if (nombre !="" && apellido !="" && DNI !=""&& cantidadPers !="") {
+            try {
+                const querySnapshot = await getDocs(collection(db, 'Reservas'));
+                const contadorReserva = querySnapshot.size;
+                if (contadorReserva < MAX_DOCS) {
+                    await addDoc(collection(db, 'Reservas'),{
+                        nombre,
+                        apellido,
+                        DNI,
+                        cantidadPers,
+                    });
+                    setGlobal(Number(contadorReserva) + Number(cantidadPers)) 
+                    
+                    
+                    
+                    
+                    console.log('Producto agregado');
+                    // Limpiar los campos después de agregar
+                    setNombre('');
+                    setApellido('');
+                    setDNI('');
+                    setCantidadPers('');
+                    Toast.show({
+                        type: 'success',
+                        text1: 'Venta subida!',
+                        position: 'top',
+                        visibilityTime: 3000,
+                    });
+                }else{
+                    Toast.show({
+                        type: 'error',
+                        text1: 'No tienes más espacio en los roperos',
+                        position: 'top',
+                        visibilityTime: 3000,
+                    });
+                }
+                
+            } catch (error) {
+                
+                console.error('Error al agregar reserva: ', error);
+            }
+        }
+        else {
+            
+            Toast.show({
+                type: 'error',
+                text1: 'Completa los campos!',
+                position: 'top',
+                visibilityTime: 3000,
+            });
+            
+        }
+        
+    };
     return (
         <ImageBackground source={img} style={styles.container}>
-        <Text style={styles.titulo}>Reserva Nueva</Text>
+        <Toast ref={(ref) => Toast.setRef(ref)} />
+        <Text style={styles.titulo}>Venta Nueva</Text>
         <View style={styles.menu}>
             <TouchableOpacity onPress={() => navigation.navigate('reserva')}><Image source={require('../img/left.png')}></Image></TouchableOpacity>
             <Text style={styles.texto}>Entradas</Text>
@@ -11,7 +91,7 @@ export default function NuevaReserva ({navigation}) {
         <View style={styles.vendidas}>
             <Text style={styles.texti}>Vendidas</Text>
             <View style={styles.num}>
-                <Text style={styles.textito}>Número</Text>
+                <Text> {GLOBAL}/100</Text> 
             </View>
         </View>
         <View style={styles.venderNav}>
@@ -19,15 +99,37 @@ export default function NuevaReserva ({navigation}) {
         </View>
         <View style={styles.vender}>
             <View style={styles.inputs}>
-                <TextInput style={styles.input } placeholder='Nombre'></TextInput>
-                <TextInput style={styles.input } placeholder='Apellido'></TextInput>
-                <TextInput style={styles.input} placeholder='Dni'></TextInput>
-                <TextInput style={styles.input} placeholder='Cantidad de personas'></TextInput>
+                <TextInput 
+                    style={styles.input }
+                    placeholder='Nombre'
+                    value={nombre}
+                    onChangeText={setNombre}
+                ></TextInput>
+                <TextInput 
+                    style={styles.input } 
+                    placeholder='Apellido'
+                    value={apellido}
+                    onChangeText={setApellido}
+                ></TextInput>
+                <TextInput
+                    style={styles.input} 
+                    placeholder='Dni'
+                    value={DNI}
+                    onChangeText={setDNI}
+                ></TextInput>
+                <TextInput
+                    style={styles.input} 
+                    placeholder='Cantidad de personas'
+                    value={cantidadPers}
+                    onChangeText={setCantidadPers}
+                ></TextInput>
             </View>
-            <TouchableOpacity style={styles.boton}>
+                     
+            <TouchableOpacity style={styles.boton} onPress={addProducto} >
                 <Text style={styles.font}>Vender</Text>
             </TouchableOpacity>
-            
+           
+                
         </View >
         </ImageBackground>
     );
@@ -92,7 +194,7 @@ const styles = StyleSheet.create({
             justifyContent:'center'
         },
         venderNav:{
-            width:'80%',
+            width:310,
             height:'8%',
             backgroundColor:'rgba(255,255,255,0.7);',
             borderTopLeftRadius:10,
@@ -102,8 +204,8 @@ const styles = StyleSheet.create({
             
         },
         vender:{
-            width:'80%',
-            height:'50%',
+            width:310,
+            height:400,
             backgroundColor:'rgba(255,255,255,0.7);',
             borderBottomLeftRadius:10,
             borderBottomRightRadius:10,

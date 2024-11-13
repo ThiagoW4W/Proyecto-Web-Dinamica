@@ -1,9 +1,83 @@
 import { StyleSheet,View,ImageBackground,Text,TouchableOpacity,Image,TextInput,ScrollView } from 'react-native';
+import { db } from '../firebase/config';
+import { addDoc, collection,getDocs} from 'firebase/firestore';
+import Toast from 'react-native-toast-message';
+import { useEffect, useState } from 'react';
 const img = require ("../fondo.jpg")
+const MAX_DOCS = 100;
+
 export default function NuevaVenta ({navigation}) {
+    const [nombre, setNombre] = useState('');
+    const [apellido, setApellido] = useState('');
+    const [DNI, setDNI] = useState('');
+    const [GLOBAL,setGlobal] = useState('')
+
+
+const verCantidadVentas = async () =>{
+    const querySnapshot = await getDocs(collection(db, 'Ventas'));
+    const contadorVentas = querySnapshot.size;
+    setGlobal(contadorVentas)
+}
+useEffect (() => {
+    verCantidadVentas()
+    console.log("hola tengo",GLOBAL)
+}, []);
+
     
+    const addProducto = async () => {
+        if (nombre !="" && apellido !="" && DNI !="") {
+            try {
+                const querySnapshot = await getDocs(collection(db, 'Ventas'));
+                const contadorVentas = querySnapshot.size;
+                if (contadorVentas < MAX_DOCS) {
+                    await addDoc(collection(db, 'Ventas'),{
+                        nombre,
+                        apellido,
+                        DNI,
+                    });
+                    setGlobal(contadorVentas)
+                    verCantidadVentas()
+                    
+                    console.log('Producto agregado');
+                    // Limpiar los campos después de agregar
+                    setNombre('');
+                    setApellido('');
+                    setDNI('');
+                    Toast.show({
+                        type: 'success',
+                        text1: 'Venta subida!',
+                        position: 'top',
+                        visibilityTime: 3000,
+                    });
+                }else{
+                    Toast.show({
+                        type: 'error',
+                        text1: 'No tienes más espacio en los roperos',
+                        position: 'top',
+                        visibilityTime: 3000,
+                    });
+                }
+                
+            } catch (error) {
+                
+                console.error('Error al agregar el producto: ', error);
+            }
+        }
+        else {
+            
+            Toast.show({
+                type: 'error',
+                text1: 'Completa los campos!',
+                position: 'top',
+                visibilityTime: 3000,
+            });
+            
+        }
+        
+    };
     return (
         <ImageBackground source={img} style={styles.container}>
+        <Toast ref={(ref) => Toast.setRef(ref)} />
         <Text style={styles.titulo}>Venta Nueva</Text>
         <View style={styles.menu}>
             <TouchableOpacity onPress={() => navigation.navigate('ventas')}><Image source={require('../img/left.png')}></Image></TouchableOpacity>
@@ -12,7 +86,7 @@ export default function NuevaVenta ({navigation}) {
         <View style={styles.vendidas}>
             <Text style={styles.texti}>Vendidas</Text>
             <View style={styles.num}>
-                <Text style={styles.textito}>Número</Text>
+                <Text> {GLOBAL}/100</Text> 
             </View>
         </View>
         <View style={styles.venderNav}>
@@ -20,14 +94,31 @@ export default function NuevaVenta ({navigation}) {
         </View>
         <View style={styles.vender}>
             <View style={styles.inputs}>
-                <TextInput style={styles.input } placeholder='Nombre'></TextInput>
-                <TextInput style={styles.input } placeholder='Apellido'></TextInput>
-                <TextInput style={styles.input} placeholder='Dni'></TextInput>
+                <TextInput 
+                    style={styles.input }
+                    placeholder='Nombre'
+                    value={nombre}
+                    onChangeText={setNombre}
+                ></TextInput>
+                <TextInput 
+                    style={styles.input } 
+                    placeholder='Apellido'
+                    value={apellido}
+                    onChangeText={setApellido}
+                ></TextInput>
+                <TextInput
+                    style={styles.input} 
+                    placeholder='Dni'
+                    value={DNI}
+                    onChangeText={setDNI}
+                ></TextInput>
             </View>
-            <TouchableOpacity style={styles.boton}>
+                     
+            <TouchableOpacity style={styles.boton} onPress={addProducto} >
                 <Text style={styles.font}>Vender</Text>
             </TouchableOpacity>
-            
+           
+                
         </View >
         </ImageBackground>
     );
@@ -92,7 +183,7 @@ const styles = StyleSheet.create({
             justifyContent:'center'
         },
         venderNav:{
-            width:'80%',
+            width:310,
             height:'8%',
             backgroundColor:'rgba(255,255,255,0.7);',
             borderTopLeftRadius:10,
@@ -102,8 +193,8 @@ const styles = StyleSheet.create({
             
         },
         vender:{
-            width:'80%',
-            height:'50%',
+            width:310,
+            height:400,
             backgroundColor:'rgba(255,255,255,0.7);',
             borderBottomLeftRadius:10,
             borderBottomRightRadius:10,

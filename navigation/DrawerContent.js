@@ -119,7 +119,7 @@ import {useState,useEffect} from "react";
         </View>
 
 
-        <TouchableOpacity style={Styles.Size}>
+        <TouchableOpacity style={Styles.Size} onPress={()=>navigation.navigate('perfil')}>
             <Text style={Styles.button2} >Perfil</Text>
         </TouchableOpacity>
         
@@ -349,7 +349,7 @@ import {useState,useEffect} from "react";
     img:{
         width:'15%',
         height:'100%',
-        left:'300%'
+        left:'35%'
     },
     textoCantero:{
        textAlign:'center'
