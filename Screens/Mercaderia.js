@@ -13,7 +13,7 @@ export default function Mercaderia({ navigation }) {
 
     // Estado para controlar el modal y los valores del producto
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [currentProduct, setCurrentProduct] = useState(null);
+    const [Producto, setProducto] = useState(null);
     const [nombre, setNombre] = useState('');
     const [precio, setPrecio] = useState('');
     const [stock, setStock] = useState('');
@@ -41,9 +41,9 @@ export default function Mercaderia({ navigation }) {
             setcargando(false);
         }
     };
-
+ 
     const openModal = (product) => {
-        setCurrentProduct(product);
+        setProducto(product);
         setNombre(product.nombre ?? '');
         setPrecio(product.precio ?? '');
         setStock(product.stock ?? '');
@@ -52,9 +52,9 @@ export default function Mercaderia({ navigation }) {
 
     // Función para guardar cambios en Firebase
     const CambiarDatos = async () => {
-        if (currentProduct) {
+        if (Producto) {
             try {
-                const productRef = doc(db, 'productos', currentProduct.id);
+                const productRef = doc(db, 'productos', Producto.id);
                 await updateDoc(productRef, { nombre, precio, stock });
                 Toast.show({
                     type: 'success',
@@ -70,9 +70,9 @@ export default function Mercaderia({ navigation }) {
         setIsModalVisible(false);
     };
     const deleteProduct = async () => {
-        if (!currentProduct) return; 
+        if (!Producto) return; 
         try {
-            await deleteDoc(doc(db, 'productos', currentProduct.id));
+            await deleteDoc(doc(db, 'productos', Producto.id));
             Toast.show({
                 type: 'success',
                 text1: 'Producto eliminado!',
@@ -80,7 +80,7 @@ export default function Mercaderia({ navigation }) {
                 visibilityTime: 3000,
             });
             setIsModalVisible(false); 
-            setCurrentProduct(null); 
+            setProducto(null); 
             TraerDatos(); 
         } catch (error) {
             console.error('Error al eliminar el producto: ', error);
