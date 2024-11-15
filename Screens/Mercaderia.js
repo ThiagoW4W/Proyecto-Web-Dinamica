@@ -1,15 +1,22 @@
-import { StyleSheet, View, ImageBackground, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
-import React from 'react';
+import { StyleSheet, View, ImageBackground, Text, Image, TouchableOpacity, ScrollView, RefreshControl, Modal, TextInput, Button } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
-import { useState, useEffect } from 'react';
 import { db } from '../firebase/config';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 
 const image = require('./../fondo.jpg');
 
 export default function Mercaderia({ navigation }) {
-    const [Productos, setProductos] = useState([]); // Estado para almacenar los datos de la BD
-    const [cargando, setcargando] = useState(true); // Estado de carga
+    const [Productos, setProductos] = useState([]);
+    const [cargando, setcargando] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
+
+    // Estado para controlar el modal y los valores del producto
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [currentProduct, setCurrentProduct] = useState(null);
+    const [nombre, setNombre] = useState('');
+    const [precio, setPrecio] = useState('');
+    const [stock, setStock] = useState('');
 
     // Función para obtener datos de Firestore
     const TraerDatos = async () => {
@@ -21,10 +28,7 @@ export default function Mercaderia({ navigation }) {
                 precio: doc.data().precio ? String(doc.data().precio) : 'Sin precio',
                 stock: doc.data().stock ? String(doc.data().stock) : 'Sin stock',
             }));
-            setProductos(dataList); // Guarda los datos en el estado
-            console.log('Mostrando datos de la base de datos ');
-
-            // Muestra el mensaje de éxito
+            setProductos(dataList);
             Toast.show({
                 type: 'success',
                 text1: 'Datos cargados!',
@@ -34,11 +38,61 @@ export default function Mercaderia({ navigation }) {
         } catch (error) {
             console.error('Error al obtener datos: ', error);
         } finally {
-            setcargando(false); // Desactiva el estado de carga
+            setcargando(false);
         }
     };
 
-    // useEffect para cargar los datos al inicio
+    const openModal = (product) => {
+        setCurrentProduct(product);
+        setNombre(product.nombre ?? '');
+        setPrecio(product.precio ?? '');
+        setStock(product.stock ?? '');
+        setIsModalVisible(true);
+    };
+
+    // Función para guardar cambios en Firebase
+    const CambiarDatos = async () => {
+        if (currentProduct) {
+            try {
+                const productRef = doc(db, 'productos', currentProduct.id);
+                await updateDoc(productRef, { nombre, precio, stock });
+                Toast.show({
+                    type: 'success',
+                    text1: 'Producto actualizado!',
+                    position: 'top',
+                    visibilityTime: 3000,
+                });
+                TraerDatos(); 
+            } catch (error) {
+                console.error("Error al actualizar producto:", error);
+            }
+        }
+        setIsModalVisible(false);
+    };
+    const deleteProduct = async () => {
+        if (!currentProduct) return; 
+        try {
+            await deleteDoc(doc(db, 'productos', currentProduct.id));
+            Toast.show({
+                type: 'success',
+                text1: 'Producto eliminado!',
+                position: 'top',
+                visibilityTime: 3000,
+            });
+            setIsModalVisible(false); 
+            setCurrentProduct(null); 
+            TraerDatos(); 
+        } catch (error) {
+            console.error('Error al eliminar el producto: ', error);
+        }
+    };
+
+    const onRefresh = async () => {
+        setRefreshing(true);
+        await TraerDatos();
+        setRefreshing(false);
+    };
+
     useEffect(() => {
         TraerDatos();
     }, []);
@@ -46,41 +100,43 @@ export default function Mercaderia({ navigation }) {
     return (
         <ImageBackground source={image} style={styles.mercaderiaContainer}>
             {cargando ? (
-                <Text style={styles.loadingText}>Cargando productos...</Text> // Mensaje mientras se cargan los datos
+                <Text style={styles.loadingText}>Cargando productos...</Text>
             ) : (
                 <>
-                    <Text style={styles.tituloTexto}>Mercaderia</Text>
+                    <Text style={styles.tituloTexto}>Mercadería</Text>
                     <Text style={styles.subtituloTexto}>Productos</Text>
-
                     <View style={styles.box}>
                         <View style={styles.navSup}>
-                            <TouchableOpacity onPress={() => navigation.navigate('inicia')}>
-                                <Image source={require("../img/left.png")} style={styles.imagen} />
-                            </TouchableOpacity>
                             <Text>Nombre</Text>
                             <Text>Precio</Text>
                             <Text>Stock</Text>
-
                         </View>
-                        <ScrollView>
+                        <ScrollView
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={refreshing}
+                                    onRefresh={onRefresh}
+                                    colors={['blue']}
+                                />
+                            }
+                            contentContainerStyle={styles.ContenedorLockers}
+                        >
                             <View style={styles.ProductosContainer}>
-                            <View style={styles.Productos} > 
-                                
-                            </View>
                                 {Productos.length > 0 ? (
-                                    Productos.map((productos) => (
-                                        <View style={styles.Productos} key={productos.id}>
-                                            <View style={styles.productos}>
-                                            <View style={styles.object}>
-                                                    <Text>{productos.nombre ?? 'Sin nombre'}</Text>
+                                    Productos.map((producto) => (
+                                        <View style={styles.Productos} key={producto.id}>
+                                            <TouchableOpacity style={styles.productos} 
+                                            onPress={() => openModal(producto)}>
+                                                <View style={styles.object} >
+                                                    <Text>{producto.nombre ?? 'Sin nombre'}</Text>
                                                 </View>
                                                 <View style={styles.object}>
-                                                    <Text>{productos.precio ?? 'Sin nombre'}</Text>
+                                                    <Text>{producto.precio ?? 'Sin precio'}</Text>
                                                 </View>
                                                 <View style={styles.object}>
-                                                    <Text>{productos.stock ?? 'Sin precio'}</Text>
+                                                    <Text>{producto.stock ?? 'Sin stock'}</Text>
                                                 </View>
-                                            </View>
+                                            </TouchableOpacity>
                                         </View>
                                     ))
                                 ) : (
@@ -103,6 +159,44 @@ export default function Mercaderia({ navigation }) {
                 </>
             )}
             <Toast ref={(ref) => Toast.setRef(ref)} />
+
+            {/* Modal para editar producto */}
+            <Modal visible={isModalVisible} animationType="slide" transparent={true}>
+                <View style={styles.modalContent}>
+                    <Text style={styles.tituloTextoModal}>Modificar Producto</Text>
+                    <TextInput
+                        placeholder="Nombre"
+                        value={nombre}
+                        onChangeText={text => setNombre(text)}
+                        style={styles.input}
+                    />
+                    <TextInput
+                        placeholder="Precio"
+                        value={precio}
+                        onChangeText={text => setPrecio(text)}
+                        keyboardType="numeric"
+                        style={styles.input}
+                    />
+                    <TextInput
+                        placeholder="Stock"
+                        value={stock}
+                        onChangeText={text => setStock(text)}
+                        keyboardType="numeric"
+                        style={styles.input}
+                    />
+                    <View style={styles.botonesModal}>
+                    <TouchableOpacity onPress={CambiarDatos} style={styles.botonModal}>
+                        <Text style={styles.buttonTextModal}>Guardar</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setIsModalVisible(false)} style={[styles.botonModal]}>
+                        <Text style={styles.buttonTextModal}>Cancelar</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={deleteProduct} style={[styles.botonModal]}>
+                    <   Text style={styles.buttonTextModal}>Eliminar</Text>
+                    </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
         </ImageBackground>
     );
 }
@@ -116,6 +210,43 @@ const styles = StyleSheet.create({
         width: 'auto',
         height: '100%',
     },
+    modalContent: {
+        flex:1,
+        
+        backgroundColor:'white',
+        opacity: 0.7,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding:20,
+        
+        
+        borderRadius:20,
+    },
+    input: {
+        borderWidth: 1,
+        padding: 10,
+        borderRadius: 5,
+        marginBottom: 10,
+        width: '80%',
+        backgroundColor: 'white',
+    },
+    botonesModal:{
+        
+        display:'flex',
+        flexDirection: 'row',
+        gap: 20,
+    },
+    botonModal:{
+        width: 120,
+        textAlign: 'center',
+        borderWidth: 1,
+        padding:10,
+        borderRadius: 20,
+    },
+    buttonTextModal:{
+        fontSize:20,
+        textAlign: 'center',
+    },
     box: {
         width: '80%',
         height: '80%',
@@ -126,6 +257,10 @@ const styles = StyleSheet.create({
     },
     tituloTexto: {
         color: 'white',
+        fontSize: 30,
+    },
+    tituloTextoModal:{
+        color: 'black',
         fontSize: 30,
     },
     subtituloTexto: {

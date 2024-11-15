@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react';
-import { View,StyleSheet, Text, ImageBackground,TextInput, TouchableOpacity,Image,Modal} from 'react-native';
+import { View,StyleSheet, Text, ImageBackground,TextInput, TouchableOpacity,Image,Modal,ScrollView,RefreshControl} from 'react-native';
 import { getDoc, doc,setDoc } from 'firebase/firestore';
 import { useFocusEffect } from '@react-navigation/native';
 import { db,auth } from '../firebase/config';
@@ -8,6 +8,7 @@ const img = require ("../fondo.jpg")
 function Perfil({ navigation }) {
   const [isModalVisible, SetIsModalVisible] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [refreshing, setRefreshing] = useState(false); // Estado para la actualización
   useFocusEffect(
     React.useCallback(() => {
       SetIsModalVisible(false); 
@@ -36,6 +37,11 @@ function Perfil({ navigation }) {
   useEffect(() => {
     takeUser();  
   }, []);
+  const onRefresh = async () => {
+    setRefreshing(true); 
+    await takeUser();  
+    setRefreshing(false); 
+  };
   
 
     return (
@@ -52,6 +58,7 @@ function Perfil({ navigation }) {
               <Modal visible={isModalVisible} animationType="slide"
         transparent={true}>
             <View style={styles.modalBox}>
+
                 <View style={styles.modal}>
                     <View style={styles.TextBox}>
                          <Text style={styles.textM}>¿Estás seguro Que deseas </Text>
@@ -68,6 +75,18 @@ function Perfil({ navigation }) {
                 </View>
             </View>
         </Modal>
+        <ScrollView 
+              
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing} 
+                  onRefresh={onRefresh} // Activa el pull-to-refresh
+                  colors={['blue' ]} // Colores de la animación de carga
+                />
+              }
+              contentContainerStyle={styles.containerPerfil}
+             
+            >
               <View style={styles.imageBox}>
                 <View style={styles.whiteBox}>
                      <View style={styles.foto}><Text style={styles.texto2}>Foto</Text></View>
@@ -81,7 +100,7 @@ function Perfil({ navigation }) {
                 <TextInput editable={false} style={styles.input} placeholder='Email'  value={userData?.email || ''} onChangeText={(text) =>setEmail(text)}></TextInput>
                 <TextInput editable={false} style={styles.input} placeholder='Contraseña' value={userData?.password || ''} onChangeText={(text) =>setPassword(text)}></TextInput>
               </View>
-          
+              </ScrollView>
            </View>
         </ImageBackground>
         
@@ -93,6 +112,11 @@ const styles = StyleSheet.create({ //estilos
       flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
+      width: '100%',
+      height: '100%',
+    },
+    containerPerfil:{
+      
       width: '100%',
       height: '100%',
     },
