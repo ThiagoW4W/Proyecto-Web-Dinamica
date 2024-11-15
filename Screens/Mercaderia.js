@@ -1,4 +1,4 @@
-import { StyleSheet, View, ImageBackground, Text, Image, TouchableOpacity, ScrollView, RefreshControl, Modal, TextInput, Button } from 'react-native';
+import { StyleSheet, View, ImageBackground, Text, Image, TouchableOpacity, ScrollView, RefreshControl, Modal, TextInput, Button,Alert } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
 import { db } from '../firebase/config';
@@ -53,7 +53,9 @@ export default function Mercaderia({ navigation }) {
     // Función para guardar cambios en Firebase
     const CambiarDatos = async () => {
         if (Producto) {
+            
             try {
+                if ( nombre!='' && precio!='' && stock!=''){
                 const productRef = doc(db, 'productos', Producto.id);
                 await updateDoc(productRef, { nombre, precio, stock });
                 Toast.show({
@@ -63,6 +65,9 @@ export default function Mercaderia({ navigation }) {
                     visibilityTime: 3000,
                 });
                 TraerDatos(); 
+            }else{
+                Alert.alert("Error", "Por favor, completa todos los campos.");
+            }
             } catch (error) {
                 console.error("Error al actualizar producto:", error);
             }

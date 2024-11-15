@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react';
-import { View,StyleSheet, Text, ImageBackground,TextInput, TouchableOpacity,Image,Modal} from 'react-native';
+import { View,StyleSheet, Text, ImageBackground,TextInput, TouchableOpacity,Image,Modal,Alert} from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { getDoc, doc,setDoc } from 'firebase/firestore';
 import { db,auth } from '../firebase/config';
@@ -19,20 +19,24 @@ function ActualizarPerfil({ navigation }) {
     const user = auth.currentUser;  
     if (user) {
         try{
+        if(password!='' && nombre!='' && dni !=''){
     const userRef = doc(db, 'Users', user.uid);  
     await setDoc(userRef, {
       password: password || '' ,
       nombre:nombre || '' ,
       Dni:dni || ''
     }, { merge: true });
-
+    navigation.navigate('perfil')
+     }else{
+      Alert.alert("Error", "Por favor, completa todos los campos.");
+     }
     }catch (error){
         console.error('error al actualizar los datos',error)
     }
     } else{
         console.log('usuario no autenticado')
     }
-    navigation.navigate('perfil')
+
   }
  
     return (
