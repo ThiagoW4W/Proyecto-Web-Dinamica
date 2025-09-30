@@ -1,6 +1,6 @@
 # Proyecto Web Dinámica 📱
 
-Este es un proyecto académico: una app móvil hecha con **React**, con funcionalidades típicas que se piden en la facultad.
+Este es un proyecto académico: una app móvil hecha con **React**, con funcionalidades típicas.
 
 ## 🛠 Funcionalidades principales
 
